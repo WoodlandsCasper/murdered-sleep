@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Case of the Murdered Sleep — Monday</title>
+<style>
+
+:root{
+  --ink:#1b1b1b;
+  --muted:#6f6b64;
+  --paper:#fffdf8;
+  --cream:#f4f0e7;
+  --line:#d8d0c4;
+  --accent:#7a1f2b;
+  --accent2:#b48a48;
+  --green:#2d5b4a;
+  --shadow:0 16px 45px rgba(25,20,15,.12);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(180,138,72,.10), transparent 28%),
+    radial-gradient(circle at 85% 20%, rgba(122,31,43,.08), transparent 30%),
+    var(--cream);
+  color:var(--ink);
+  font-family:Georgia,"Times New Roman",serif;
+}
+a{color:inherit}
+.site-shell{max-width:1050px;margin:0 auto;padding:24px 18px 60px}
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:10px 0 18px;font-family:Arial,sans-serif;font-size:12px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted)
+}
+.brand{font-weight:800;color:var(--accent)}
+.nav a{text-decoration:none;margin-left:14px}
+.hero{
+  position:relative;overflow:hidden;border:1px solid var(--line);
+  background:var(--paper);box-shadow:var(--shadow);border-radius:18px;
+  padding:42px 42px 34px;margin-bottom:22px;
+}
+.hero:after{
+  content:"";position:absolute;width:240px;height:240px;border:1px solid rgba(122,31,43,.16);
+  border-radius:50%;right:-90px;top:-90px;
+}
+.eyebrow{font:800 12px Arial,sans-serif;letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
+h1{font-size:clamp(38px,6vw,68px);line-height:.95;margin:10px 0 14px;letter-spacing:-.035em}
+.hero p{max-width:760px;font-size:18px;line-height:1.65;margin:0;color:#4d4942}
+.case-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.pill{
+  border:1px solid var(--line);border-radius:999px;padding:8px 12px;
+  font:700 11px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;
+  background:#fff;
+}
+.section{
+  border:1px solid var(--line);background:var(--paper);border-radius:16px;
+  box-shadow:0 8px 25px rgba(25,20,15,.07);padding:28px;margin-top:20px
+}
+.section h2{margin:0 0 14px;font-size:28px}
+.clue-card{
+  white-space:pre-wrap;font-size:18px;line-height:1.72;
+  background:#fff;border-left:5px solid var(--accent);padding:22px 24px;
+  border-radius:10px;
+}
+.game-intro{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:20px;
+  margin-bottom:14px
+}
+.game-intro p{margin:0;color:var(--muted);line-height:1.55}
+.badge{
+  flex:none;background:var(--accent);color:white;padding:8px 12px;border-radius:6px;
+  font:800 11px Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase
+}
+.back-link{
+  display:inline-flex;align-items:center;gap:7px;text-decoration:none;
+  font:700 12px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent);margin-top:16px
+}
+.footer{text-align:center;color:var(--muted);font:12px Arial,sans-serif;padding:30px 0}
+.instructions-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.info-card{border:1px solid var(--line);background:#fff;padding:20px;border-radius:12px}
+.info-card h3{margin:0 0 8px;font-size:20px}
+.info-card p,.info-card li{line-height:1.6;color:#4d4942}
+.timeline{display:grid;gap:10px}
+.timeline-row{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:14px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.timeline-row strong{color:var(--accent);font-family:Arial,sans-serif;letter-spacing:.08em}
+.warning{border-left:5px solid var(--accent2);background:#fbf6e9;padding:16px 18px;border-radius:8px;line-height:1.55}
+.start-button{
+  display:inline-block;margin-top:22px;background:var(--accent);color:#fff;text-decoration:none;
+  padding:13px 18px;border-radius:7px;font:800 12px Arial,sans-serif;
+  letter-spacing:.1em;text-transform:uppercase
+}
+@media(max-width:720px){
+ .hero{padding:30px 24px}.section{padding:21px}
+ .instructions-grid{grid-template-columns:1fr}
+ .timeline-row{grid-template-columns:1fr;gap:5px}
+ .topbar{align-items:flex-start;flex-direction:column}
+ .nav a{margin:0 12px 0 0}
+}
+
+
+:root {
+  --ink:#1e1e1e; --muted:#666; --paper:#fff; --line:#c9c9c9; --soft:#f3f2ef;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; padding:24px; background:#e9e7e2; color:var(--ink);
+  font-family:Georgia, "Times New Roman", serif;
+}
+.page {
+  max-width:900px; margin:auto; background:var(--paper);
+  border:1px solid #bbb; padding:34px;
+}
+.kicker { text-align:center; letter-spacing:2px; font-size:13px; color:var(--muted); }
+h1 { text-align:center; font-size:34px; margin:8px 0 4px; }
+h2 { margin-top:28px; font-size:23px; }
+.subtitle { text-align:center; color:var(--muted); margin-bottom:28px; }
+.instructions {
+  background:var(--soft); border-left:4px solid #333; padding:18px; line-height:1.55;
+}
+.clue { margin:22px 0; }
+.clue label { display:block; font-weight:bold; margin-bottom:8px; }
+input {
+  width:100%; padding:12px 13px; font:16px Arial,sans-serif;
+  border:1px solid #999; border-radius:3px;
+}
+input:focus { outline:2px solid #555; outline-offset:1px; }
+.wordgrid {
+  display:grid; grid-template-columns:repeat(15, 1fr); gap:2px;
+  max-width:630px; margin:20px auto; background:#d5d3ce; padding:7px;
+}
+.cell {
+  background:#fff; text-align:center; font:700 15px Arial,sans-serif;
+  padding:7px 1px; user-select:none;
+}
+button {
+  display:block; margin:25px auto 0; padding:14px 28px;
+  border:0; background:#222; color:#fff; font-size:17px; cursor:pointer;
+}
+button:hover { background:#444; }
+#result {
+  display:none; margin-top:26px; padding:24px; border:2px solid #222;
+  background:#fafafa; line-height:1.6;
+}
+.error { color:#8b1e1e; }
+.success h2 { margin-top:0; }
+.evidence { margin-top:18px; padding:18px; background:#eee; }
+.message {
+  font-family:Arial,sans-serif; font-size:18px; letter-spacing:.5px;
+}
+.small { color:var(--muted); font-size:14px; }
+@media (max-width:600px) {
+ body { padding:8px; }
+ .page { padding:18px; }
+ h1 { font-size:27px; }
+ .wordgrid { gap:1px; padding:4px; }
+ .cell { font-size:10px; padding:5px 0; }
+}
+
+</style>
+
+<style id="fixed-word-search">
+.wordgrid{
+  display:grid !important;
+  grid-template-columns:repeat(15,minmax(0,1fr)) !important;
+  gap:4px !important;
+  max-width:720px !important;
+  margin:22px auto !important;
+  padding:10px !important;
+  background:#d7d4ce !important;
+  border-radius:8px !important;
+  touch-action:none !important;
+}
+.wordgrid .cell{
+  appearance:none;
+  -webkit-appearance:none;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:100% !important;
+  aspect-ratio:1 !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  border:1px solid #bbb !important;
+  border-radius:4px !important;
+  background:#fff !important;
+  color:#111 !important;
+  font:700 18px Arial,sans-serif !important;
+  padding:0 !important;
+  margin:0 !important;
+  cursor:pointer !important;
+  user-select:none !important;
+  -webkit-user-select:none !important;
+  touch-action:none !important;
+}
+.wordgrid .cell.selected{
+  background:#d8cf9b !important;
+  box-shadow:inset 0 0 0 2px #8b7b2d !important;
+}
+.wordgrid .cell.found{
+  background:#c6b45a !important;
+  box-shadow:inset 0 0 0 2px #75651f !important;
+}
+.word-search-help{
+  background:#f5f1df;
+  border:1px solid #b8a85e;
+  padding:14px 16px;
+  border-radius:7px;
+  margin:14px 0;
+  line-height:1.5;
+}
+@media(max-width:600px){
+  .wordgrid{gap:2px !important;padding:5px !important}
+  .wordgrid .cell{font-size:11px !important}
+}
+</style>
+</head>
+<body>
+<div class="site-shell">
+  <div class="topbar">
+    <div class="brand">Casper Sleep Police</div>
+    <div class="nav"><a href="instructions.html">How to Play</a></div>
+  </div>
+
+  <header class="hero">
+    <div class="eyebrow">CASE FILE 01 • MONDAY</div>
+    <h1>The Case of<br>the Murdered Sleep</h1>
+    <p>The Case Opens. Read today’s evidence carefully, then solve the detective challenge below. Your answers unlock classified evidence automatically.</p>
+    <div class="case-meta">
+      <span class="pill">Daily Investigation</span>
+      <span class="pill">Interactive Puzzle</span>
+      <span class="pill">Evidence Unlock</span>
+    </div>
+    <a class='start-button' href='instructions.html'>Game Instructions</a>
+  </header>
+
+  <section class="section">
+    <div class="game-intro">
+      <div>
+        <div class="eyebrow">CASE FILE 01</div>
+        <h2>The Case Opens</h2>
+      </div>
+      <div class="badge">Read the Clue</div>
+    </div>
+    <div class="clue-card">Breaking News, Sleep Detectives!
+
+Something terrible has happened at Casper.
+
+At exactly 3:13 a.m. on October 26, the overnight security system recorded a strange sequence of events.
+
+When the morning team arrived, the showroom looked like someone had been very busy while everyone else was sleeping.
+
+Investigators discovered:
+
+• Three mattresses had been adjusted into different positions.
+• One Adjustable Base remote was missing.
+• A Casper pillow had been moved from its display.
+• A half-finished cup of coffee sat beside a demo bed.
+• The showroom lights had been turned back on.
+• And written on the back-room whiteboard: “SLEEP IS OVERRATED.”
+
+Nothing was damaged.
+Nothing appeared to be stolen.
+
+So the Sleep Police have one big question:
+
+Was someone trying to destroy sleep... or demonstrate something?
+
+Six suspects had connections to the showroom that night.
+
+Over the next five days, you’ll receive new evidence.
+
+Study the clues.
+Solve the daily detective games.
+Watch for false leads.
+
+And remember:
+
+Not every clue is telling you the truth.
+
+Your job is to figure out:
+
+WHO MURDERED SLEEP?
+
+The case is officially open.</div>
+    <a class="back-link" href="#detective-game">↓ Continue to today’s detective game</a>
+  </section>
+
+
+  <section class="section">
+    <div class="game-intro">
+      <div>
+        <div class="eyebrow">THE CRIME</div>
+        <h2>What Happened to Sleep?</h2>
+      </div>
+      <div class="badge">Classified Briefing</div>
+    </div>
+
+    <div class="clue-card">
+At exactly 3:13 a.m. on October 26, the Spirit of Perfect Sleep was murdered — or so the Sleep Police believe.
+
+When the morning team arrived at the Casper showroom, Sleep was gone.
+
+The scene was strange but oddly specific:
+
+• Three mattresses had been adjusted into different positions.
+• Every Adjustable Base in the showroom had been raised.
+• One Adjustable Base remote was missing.
+• One Casper pillow had been moved from its display.
+• A half-finished cup of coffee sat beside a demo bed.
+• The showroom lights had been turned back on.
+• A footprint was found covered in pillow feathers.
+• The clock had stopped at exactly 3:13 a.m.
+• On the back-room whiteboard, someone had written: “SLEEP IS OVERRATED.”
+
+Nothing valuable appeared to be stolen.
+
+The Sleep Police believe someone deliberately interfered with the showroom's sleep environment — and then tried to make the scene look like something else.
+
+Six people had access to the showroom that night.
+
+Your mission is not simply to find someone who looks suspicious.
+
+Your mission is to determine who had the opportunity, motive, and connection to the evidence — and ultimately answer:
+
+WHO MURDERED SLEEP?
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="game-intro">
+      <div>
+        <div class="eyebrow">SUSPECT FILES</div>
+        <h2>The Six Suspects</h2>
+        <p>Every suspect has a reason to be investigated. Some may be innocent. Some may be hiding something. And one may be responsible.</p>
+      </div>
+      <div class="badge">Read Carefully</div>
+    </div>
+
+    <div class="instructions-grid">
+      <div class="info-card">
+        <h3>Olivia “Overtime”</h3>
+        <p><strong>Role:</strong> The hard-working closer.</p>
+        <p><strong>Known for:</strong> Working late and believing the work should come before sleep.</p>
+        <p><strong>Statement:</strong> “I’ll sleep when the work is done.”</p>
+        <p><strong>Last known activity:</strong> Left the showroom at 11:47 p.m.</p>
+        <p><strong>Possible motive:</strong> She may genuinely believe sleep gets in the way of productivity.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Carl “Caffeine”</h3>
+        <p><strong>Role:</strong> The coffee-and-productivity enthusiast.</p>
+        <p><strong>Known for:</strong> Running on coffee and insisting that productivity never sleeps.</p>
+        <p><strong>Statement:</strong> “Productivity doesn’t sleep.”</p>
+        <p><strong>Evidence connection:</strong> Coffee was found beside a demo bed.</p>
+        <p><strong>Possible motive:</strong> He may want people awake, alert, and productive around the clock.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Polly Pillow</h3>
+        <p><strong>Role:</strong> The pillow expert.</p>
+        <p><strong>Known for:</strong> Constantly adjusting, refluffing, and correcting pillow displays.</p>
+        <p><strong>Statement:</strong> “Nobody respects the pillow.”</p>
+        <p><strong>Evidence connection:</strong> A pillow had been moved, and pillow feathers were found at the scene.</p>
+        <p><strong>Possible motive:</strong> She may have wanted to prove that the pillow is the most important part of the sleep experience.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Barry Base</h3>
+        <p><strong>Role:</strong> The Adjustable Base expert.</p>
+        <p><strong>Known for:</strong> Demonstrating Zero Gravity and believing the future of sleep is adjustable.</p>
+        <p><strong>Statement:</strong> “Flat beds are yesterday’s news.”</p>
+        <p><strong>Evidence connection:</strong> Every Adjustable Base had been raised, and a remote was missing.</p>
+        <p><strong>Last known activity:</strong> Left the showroom at 9:45 p.m.</p>
+        <p><strong>Possible motive:</strong> He wants everyone to abandon ordinary flat beds.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Nora Nightshift</h3>
+        <p><strong>Role:</strong> The after-hours regular.</p>
+        <p><strong>Known for:</strong> Knowing the showroom routines and being comfortable after closing.</p>
+        <p><strong>Statement:</strong> “I forgot my keys.”</p>
+        <p><strong>Last known activity:</strong> Left at 11:02 p.m., but later returned after midnight.</p>
+        <p><strong>Possible motive:</strong> She knew the showroom, its routines, and how to move around after hours.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Dr. Nightmare</h3>
+        <p><strong>Role:</strong> The sleep scientist.</p>
+        <p><strong>Known for:</strong> Studying sleep, dreams, and the effects of sleep deprivation.</p>
+        <p><strong>Statement:</strong> “There is still so much we don't understand about sleep.”</p>
+        <p><strong>Evidence connection:</strong> Her research could benefit from an unusual disruption of normal sleep patterns.</p>
+        <p><strong>Possible motive:</strong> Endless research — even if that means pushing the limits of what people can endure without sleep.</p>
+      </div>
+    </div>
+
+    <div class="warning" style="margin-top:18px">
+      <strong>Detective reminder:</strong> A motive is not proof. An alibi is not automatically innocence. And a suspicious clue may have been planted to point you in the wrong direction. Keep track of what you know versus what you merely suspect.
+    </div>
+  </section>
+
+  <section class="section" id="detective-game">
+    <div class="game-intro">
+      <div>
+        <div class="eyebrow">Interactive Challenge</div>
+        <h2>The Coffee Connection</h2>
+        <p>Solve the four clues, find the answers in the word search, and unlock today’s classified evidence.</p>
+      </div>
+      <div class="badge">Solve the Case</div>
+    </div>
+    
+<main class="page">
+  
+  
+  
+
+  <section class="instructions">
+    <strong>Detective Instructions</strong>
+    <p>Solve the four clues below. The answers are not given to you.</p>
+    <p>Once you solve each clue, find that answer hidden somewhere in the word search.</p>
+    <p>Enter the four answers in the order of the clues. When all four are correct, today's classified evidence will unlock automatically.</p>
+    <p class="small">Do not submit your answers to the Game Director. The puzzle will tell you when you have cracked the case.</p>
+  </section>
+
+  <h2>Solve the Clues</h2>
+
+  <div class="clue">
+    <label for="a1">Clue 1: What do many people drink in the morning to wake up?</label>
+    <input id="a1" autocomplete="off" aria-label="Answer to clue 1">
+  </div>
+
+  <div class="clue">
+    <label for="a2">Clue 2: What three-letter word means "is able to"?</label>
+    <input id="a2" autocomplete="off" aria-label="Answer to clue 2">
+  </div>
+
+  <div class="clue">
+    <label for="a3">Clue 3: What word means to interfere with, interrupt, or bother?</label>
+    <input id="a3" autocomplete="off" aria-label="Answer to clue 3">
+  </div>
+
+  <div class="clue">
+    <label for="a4">Clue 4: What do we typically need about eight hours of?</label>
+    <input id="a4" autocomplete="off" aria-label="Answer to clue 4">
+  </div>
+
+  <h2>Find Your Answers</h2>
+  <p>Find all four answers in the word search. They may appear horizontally, vertically, diagonally, forwards, or backwards.</p>
+  <div class="word-search-help"><strong>HOW TO PLAY:</strong> Click or tap the first letter of a word, then click or tap the last letter. The word will highlight. You can also drag from the first letter to the last. Words may run horizontally, vertically, diagonally, forwards, or backwards.</div>
+  <div class="wordgrid" id="grid" aria-label="Word search puzzle"></div>
+
+  <button type="button" id="submit">Unlock Evidence</button>
+
+  <div id="result" aria-live="polite"></div>
+</main>
+
+
+
+  </section>
+
+  <section class="section">
+  </section>
+
+  <div class="footer">The Case of the Murdered Sleep • Casper Sleep Police</div>
+</div>
+
+<script id="fixed-word-search-script">
+const rows=["UDHTTRNZSRXYYPY","YSOHATCDJDOAVPV","KGMILLDEZMXQUCX","KCRRJJIEOEUWWSJ","AWLLONSFCMSRPDN","QPZYTPTFMQINSPQ","QZEASHUOYEBWQVD","WTNEPERCPHDUWOV","PWRILRBMVJRZUQW","PZMNGSJIABEUTOZ","QPLGIWPOQYPZNRV","BJKOZDOWWZQIOFN","XPCUIPLDGXNEOAC","ANACOSRCTZGHDTB","YRIVYULEAKVSSYP"];
+const accepted=[["coffee"],["can"],["disturb"],["sleep"]];
+const grid=document.getElementById("grid");
+const cells=[];
+rows.forEach((row,r)=>[...row].forEach((ch,c)=>{
+  const cell=document.createElement("button");
+  cell.type="button";
+  cell.className="cell";
+  cell.textContent=ch;
+  cell.dataset.r=r;
+  cell.dataset.c=c;
+  grid.appendChild(cell);
+  cells.push(cell);
+}));
+function clean(value){return value.trim().toLowerCase().replace(/[^a-z]/g,"");}
+function cellAt(r,c){return cells.find(x=>+x.dataset.r===r && +x.dataset.c===c);}
+function getLine(a,b){
+  const ar=+a.dataset.r, ac=+a.dataset.c, br=+b.dataset.r, bc=+b.dataset.c;
+  const dr=br-ar, dc=bc-ac;
+  if(dr!==0 && dc!==0 && Math.abs(dr)!==Math.abs(dc)) return [];
+  const n=Math.max(Math.abs(dr),Math.abs(dc)), sr=Math.sign(dr), sc=Math.sign(dc), out=[];
+  for(let i=0;i<=n;i++) out.push(cellAt(ar+sr*i,ac+sc*i));
+  return out;
+}
+function clearTemp(){cells.forEach(c=>c.classList.remove("selected"));}
+function tryWord(arr){
+  const word=arr.map(c=>c.textContent).join("");
+  const reverse=[...word].reverse().join("");
+  const index=accepted.findIndex(options=>options.some(v=>v.toUpperCase()===word || v.toUpperCase()===reverse));
+  if(index<0){arr.forEach(c=>c.classList.add("selected"));setTimeout(clearTemp,450);return false;}
+  arr.forEach(c=>{c.classList.remove("selected");c.classList.add("found");});
+  const input=document.getElementById("a"+(index+1));
+  if(input) input.value=accepted[index][0];
+  return true;
+}
+let first=null, dragging=false, dragStart=null;
+cells.forEach(cell=>{
+  cell.addEventListener("click",()=>{
+    if(dragging)return;
+    if(first===null){first=cell;clearTemp();cell.classList.add("selected");return;}
+    if(cell===first){first=null;clearTemp();return;}
+    const line=getLine(first,cell);
+    if(line.length)tryWord(line);
+    first=null;clearTemp();
+  });
+  cell.addEventListener("pointerdown",e=>{dragging=true;dragStart=cell;first=null;clearTemp();e.preventDefault();});
+});
+document.addEventListener("pointerup",e=>{
+  if(!dragging)return;
+  dragging=false;
+  const end=e.target.closest(".cell");
+  if(end&&dragStart&&end!==dragStart){const line=getLine(dragStart,end);if(line.length)tryWord(line);}
+  dragStart=null;first=null;clearTemp();
+});
+document.getElementById("submit").addEventListener("click",()=>{
+  const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
+  const result=document.getElementById("result");
+  if(answers.every((v,i)=>accepted[i].some(x=>clean(x)===v))){
+    result.className="success";
+    result.innerHTML=`<h2>ACCESS GRANTED</h2>
+      <div class="evidence">
+        <h3>Bonus Evidence Unlocked</h3>
+        <p class="message">COFFEE CAN DISTURB SLEEP</p>
+        <p>Investigators now believe the coffee at the crime scene may not be random.</p>
+        <p>Someone who strongly believes in caffeine and productivity may have had a reason to interfere with sleep.</p>
+        <p><strong>Carl just became interesting.</strong></p>
+        <p>But remember:</p>
+        <p>Interesting does not mean guilty.</p>
+      </div>`;
+  }else{
+    result.className="error";
+    result.innerHTML=`<h3>ACCESS DENIED</h3>
+      <p>One or more answers is incorrect.</p>
+      <p>Go back to the clues, check your answers, and try again.</p>`;
+  }
+  result.style.display="block";
+  result.scrollIntoView({behavior:"smooth",block:"nearest"});
+});
+</script></body>
+</html>
