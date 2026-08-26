@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Case of the Murdered Sleep — How to Play</title>
+<style>
+
+:root{
+  --ink:#1b1b1b;
+  --muted:#6f6b64;
+  --paper:#fffdf8;
+  --cream:#f4f0e7;
+  --line:#d8d0c4;
+  --accent:#7a1f2b;
+  --accent2:#b48a48;
+  --green:#2d5b4a;
+  --shadow:0 16px 45px rgba(25,20,15,.12);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(180,138,72,.10), transparent 28%),
+    radial-gradient(circle at 85% 20%, rgba(122,31,43,.08), transparent 30%),
+    var(--cream);
+  color:var(--ink);
+  font-family:Georgia,"Times New Roman",serif;
+}
+a{color:inherit}
+.site-shell{max-width:1050px;margin:0 auto;padding:24px 18px 60px}
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:10px 0 18px;font-family:Arial,sans-serif;font-size:12px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted)
+}
+.brand{font-weight:800;color:var(--accent)}
+.nav a{text-decoration:none;margin-left:14px}
+.hero{
+  position:relative;overflow:hidden;border:1px solid var(--line);
+  background:var(--paper);box-shadow:var(--shadow);border-radius:18px;
+  padding:42px 42px 34px;margin-bottom:22px;
+}
+.hero:after{
+  content:"";position:absolute;width:240px;height:240px;border:1px solid rgba(122,31,43,.16);
+  border-radius:50%;right:-90px;top:-90px;
+}
+.eyebrow{font:800 12px Arial,sans-serif;letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
+h1{font-size:clamp(38px,6vw,68px);line-height:.95;margin:10px 0 14px;letter-spacing:-.035em}
+.hero p{max-width:760px;font-size:18px;line-height:1.65;margin:0;color:#4d4942}
+.case-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.pill{
+  border:1px solid var(--line);border-radius:999px;padding:8px 12px;
+  font:700 11px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;
+  background:#fff;
+}
+.section{
+  border:1px solid var(--line);background:var(--paper);border-radius:16px;
+  box-shadow:0 8px 25px rgba(25,20,15,.07);padding:28px;margin-top:20px
+}
+.section h2{margin:0 0 14px;font-size:28px}
+.clue-card{
+  white-space:pre-wrap;font-size:18px;line-height:1.72;
+  background:#fff;border-left:5px solid var(--accent);padding:22px 24px;
+  border-radius:10px;
+}
+.game-intro{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:20px;
+  margin-bottom:14px
+}
+.game-intro p{margin:0;color:var(--muted);line-height:1.55}
+.badge{
+  flex:none;background:var(--accent);color:white;padding:8px 12px;border-radius:6px;
+  font:800 11px Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase
+}
+.back-link{
+  display:inline-flex;align-items:center;gap:7px;text-decoration:none;
+  font:700 12px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent);margin-top:16px
+}
+.footer{text-align:center;color:var(--muted);font:12px Arial,sans-serif;padding:30px 0}
+.instructions-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.info-card{border:1px solid var(--line);background:#fff;padding:20px;border-radius:12px}
+.info-card h3{margin:0 0 8px;font-size:20px}
+.info-card p,.info-card li{line-height:1.6;color:#4d4942}
+.timeline{display:grid;gap:10px}
+.timeline-row{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:14px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.timeline-row strong{color:var(--accent);font-family:Arial,sans-serif;letter-spacing:.08em}
+.warning{border-left:5px solid var(--accent2);background:#fbf6e9;padding:16px 18px;border-radius:8px;line-height:1.55}
+.start-button{
+  display:inline-block;margin-top:22px;background:var(--accent);color:#fff;text-decoration:none;
+  padding:13px 18px;border-radius:7px;font:800 12px Arial,sans-serif;
+  letter-spacing:.1em;text-transform:uppercase
+}
+@media(max-width:720px){
+ .hero{padding:30px 24px}.section{padding:21px}
+ .instructions-grid{grid-template-columns:1fr}
+ .timeline-row{grid-template-columns:1fr;gap:5px}
+ .topbar{align-items:flex-start;flex-direction:column}
+ .nav a{margin:0 12px 0 0}
+}
+
+</style>
+</head>
+<body>
+<div class="site-shell">
+  <div class="topbar">
+    <div class="brand">Casper Sleep Police</div>
+    <div class="nav"><a href="monday.html">Monday Case File</a></div>
+  </div>
+
+  <header class="hero">
+    <div class="eyebrow">Detective Briefing</div>
+    <h1>How to Play</h1>
+    <p>Welcome, Sleep Detective. Someone has murdered Sleep at Casper — and your team has five days to figure out who did it.</p>
+    <div class="case-meta">
+      <span class="pill">5 Daily Cases</span>
+      <span class="pill">Interactive Puzzles</span>
+      <span class="pill">Hidden Evidence</span>
+      <span class="pill">Final Theory</span>
+    </div>
+    <a class="start-button" href="monday.html">Enter Monday’s Case →</a>
+  </header>
+
+  <section class="section">
+    <h2>Your Mission</h2>
+    <p style="font-size:18px;line-height:1.7">Each weekday, the Sleep Police will release a new piece of the investigation. Read the case clue, solve the interactive detective challenge, and use the evidence you uncover to build your theory.</p>
+    <div class="warning"><strong>Important:</strong> The game is designed to be solved as a team. Not every clue points to the guilty person. Some evidence is deliberately misleading.</div>
+  </section>
+
+  <section class="section">
+    <h2>How Each Day Works</h2>
+    <div class="instructions-grid">
+      <div class="info-card"><h3>1. Read the Case File</h3><p>Start at the top of the daily page. Read the investigation clue carefully and look for details about suspects, timing, objects, and behavior.</p></div>
+      <div class="info-card"><h3>2. Solve the Puzzle</h3><p>Scroll to the interactive detective challenge. Solve the four clues and find the answers in the word search.</p></div>
+      <div class="info-card"><h3>3. Unlock Evidence</h3><p>Enter your four answers in order. When they are correct, the classified evidence will appear automatically.</p></div>
+      <div class="info-card"><h3>4. Build Your Theory</h3><p>Write down what each new clue proves, what it eliminates, and which suspects become more or less suspicious.</p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Game Schedule</h2>
+    <div class="timeline">
+      <div class="timeline-row"><strong>MONDAY</strong><span>The case opens. Meet the suspects and investigate the first crime-scene evidence.</span></div>
+      <div class="timeline-row"><strong>TUESDAY</strong><span>Security footage reveals what the masked figure knew about the Adjustable Base.</span></div>
+      <div class="timeline-row"><strong>WEDNESDAY</strong><span>The pillow evidence reveals that the showroom setup may have been planned.</span></div>
+      <div class="timeline-row"><strong>THURSDAY</strong><span>Alibis are checked and a suspicious clue may turn out to be a false lead.</span></div>
+      <div class="timeline-row"><strong>FRIDAY</strong><span>The final evidence points toward the strongest suspect. Then the weekend investigation begins.</span></div>
+      <div class="timeline-row"><strong>SATURDAY–SUNDAY</strong><span>No new evidence. Review the full case and build your final theory.</span></div>
+      <div class="timeline-row"><strong>MONDAY</strong><span>Final detective reports are due by 10:00 a.m., followed by the case reveal.</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Detective Rules</h2>
+    <ul style="font-size:17px;line-height:1.8;color:#4d4942">
+      <li>Work together and compare theories.</li>
+      <li>Do not assume the most suspicious person is the culprit.</li>
+      <li>Pay attention to details that prove or disprove an alibi.</li>
+      <li>Keep track of false leads.</li>
+      <li>Do not share the answers to the daily puzzles before everyone has had a chance to solve them.</li>
+      <li>Most importantly: have fun with it.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2>Your Final Detective Report</h2>
+    <p style="font-size:17px;line-height:1.7">At the end of the investigation, your final theory should identify:</p>
+    <div class="instructions-grid">
+      <div class="info-card"><h3>Culprit</h3><p>Who murdered Sleep?</p></div>
+      <div class="info-card"><h3>Motive</h3><p>Why did they do it?</p></div>
+      <div class="info-card"><h3>Evidence</h3><p>What clues prove your theory?</p></div>
+      <div class="info-card"><h3>Frame Job</h3><p>Who was being made to look guilty?</p></div>
+    </div>
+    <p style="font-size:17px;line-height:1.7"><strong>Bonus:</strong> What was the culprit actually trying to accomplish?</p>
+  </section>
+
+  <div class="footer">Good luck, detectives. The Sleep Police are watching.</div>
+</div>
+</body>
+</html>
