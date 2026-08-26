@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>The Case of the Murdered Sleep — Tuesday</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:24px;background:#e9e7e2;color:#1e1e1e;font-family:Georgia,"Times New Roman",serif}
+.page{max-width:900px;margin:auto;background:#fff;border:1px solid #bbb;padding:34px}.kicker{text-align:center;letter-spacing:2px;font:13px Arial,sans-serif;color:#666}
+h1{text-align:center;font-size:34px;margin:8px 0 4px}.subtitle{text-align:center;color:#666;margin-bottom:28px}
+.instructions{background:#f3f2ef;border-left:4px solid #333;padding:18px;line-height:1.55}
+h2{margin-top:28px;font-size:23px}.clue{margin:22px 0}.clue label{display:block;font-weight:bold;margin-bottom:8px}
+input{width:100%;padding:12px 13px;font:16px Arial,sans-serif;border:1px solid #999;border-radius:3px}
+.wordgrid{display:grid;grid-template-columns:repeat(15,1fr);gap:2px;max-width:630px;margin:20px auto;background:#d5d3ce;padding:7px}
+.cell{background:#fff;text-align:center;font:700 15px Arial,sans-serif;padding:7px 1px;user-select:none}
+button{display:block;margin:25px auto 0;padding:14px 28px;border:0;background:#222;color:#fff;font-size:17px;cursor:pointer}
+#result{display:none;margin-top:26px;padding:24px;border:2px solid #222;background:#fafafa;line-height:1.6}
+.evidence{margin-top:18px;padding:18px;background:#eee}.message{font:18px Arial,sans-serif;letter-spacing:.5px}
+.error{color:#8b1e1e}.small{color:#666;font:14px Arial,sans-serif}
+@media(max-width:600px){body{padding:8px}.page{padding:18px}h1{font-size:27px}.wordgrid{gap:1px;padding:4px}.cell{font-size:10px;padding:5px 0}}
+</style></head><body><main class="page">
+<div class="kicker">CASPER SLEEP POLICE</div><h1>The Case of the Murdered Sleep</h1>
+<div class="subtitle">Tuesday Detective Challenge: The Remote's Memory</div>
+<section class="instructions"><strong>Detective Instructions</strong>
+<p>Solve the four clues below. The answers are not given to you.</p>
+<p>Once you solve each clue, find that answer hidden somewhere in the word search.</p>
+<p>Enter the four answers in the order of the clues. When all four are correct, today's classified evidence will unlock automatically.</p>
+<p class="small">Do not submit your answers to the Game Director. The puzzle will tell you when you have cracked the case.</p></section>
+<h2>Solve the Clues</h2><div class="clue"><label for="a1">Clue 1: What word describes something made or changed for a specific person or purpose?</label><input id="a1" autocomplete="off"></div>
+<div class="clue"><label for="a2">Clue 2: What word describes a saved option or configuration on a device?</label><input id="a2" autocomplete="off"></div>
+<div class="clue"><label for="a3">Clue 3: What word means “must have” or “depends on”?</label><input id="a3" autocomplete="off"></div>
+<div class="clue"><label for="a4">Clue 4: What word means the ability or permission to enter or use something?</label><input id="a4" autocomplete="off"></div>
+<h2>Find Your Answers</h2><p>Find all four answers in the word search. They may appear horizontally, vertically, diagonally, forwards, or backwards.</p>
+<div class="wordgrid" id="grid"></div>
+<button type="button" id="submit">Unlock Evidence</button><div id="result" aria-live="polite"></div>
+</main>
+<script>
+const rows=['CNFWGEBKOCWKQRN','IDAQJHHBQPJRASF','JAULYUNTBBHKOEQ','ICUSTOMMLNXOATE','CKMMCUTLDRQNNTW','RBLNLIHGRAMAVII','AUETYUEWOZYLONS','SMZHMNASFAQXMGM','ZIXVECQKPFBITHW','FAOECILAFDZOGGY','LLDELQVUVLEMNZW','TSSIXJEHRXWVWYD','YSKURJJLDBNMNQU','UTTSWVIUHJEZOHJ','SXKWJIYHVDNHCID'];const grid=document.getElementById("grid");
+rows.forEach(row=>[...row].forEach(ch=>{const cell=document.createElement("div");cell.className="cell";cell.textContent=ch;grid.appendChild(cell)}));
+function clean(v){return v.trim().toLowerCase().replace(/[^a-z]/g,"")}
+document.getElementById("submit").addEventListener("click",()=>{
+const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
+const accepted=[["custom"],["setting"],["need","needs"],["access"]];const result=document.getElementById("result");
+if(answers.every((v,i)=>accepted[i].includes(v))){
+result.className="success";result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Bonus Evidence Unlocked</h3><p class="message">CUSTOM SETTING NEEDS ACCESS</p><p>Investigators recovered the saved settings from the Adjustable Base remote.</p><p>The custom position used during the crime was not a standard factory setting.</p><p>Someone had created that custom setting before the night of the murder.</p><p>A custom setting needs access to the equipment.</p><p>The question just changed: who had access before the crime?</p></div>`;
+}else{result.className="error";result.innerHTML="<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>";}
+result.style.display="block";result.scrollIntoView({behavior:"smooth",block:"nearest"});
+});
+</script></body></html>
