@@ -117,6 +117,62 @@ button{display:block;margin:25px auto 0;padding:14px 28px;border:0;background:#2
 @media(max-width:600px){body{padding:8px}.page{padding:18px}h1{font-size:27px}.wordgrid{gap:1px;padding:4px}.cell{font-size:10px;padding:5px 0}}
 
 </style>
+
+<style id="fixed-word-search">
+.wordgrid{
+  display:grid !important;
+  grid-template-columns:repeat(15,minmax(0,1fr)) !important;
+  gap:4px !important;
+  max-width:720px !important;
+  margin:22px auto !important;
+  padding:10px !important;
+  background:#d7d4ce !important;
+  border-radius:8px !important;
+  touch-action:none !important;
+}
+.wordgrid .cell{
+  appearance:none;
+  -webkit-appearance:none;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:100% !important;
+  aspect-ratio:1 !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  border:1px solid #bbb !important;
+  border-radius:4px !important;
+  background:#fff !important;
+  color:#111 !important;
+  font:700 18px Arial,sans-serif !important;
+  padding:0 !important;
+  margin:0 !important;
+  cursor:pointer !important;
+  user-select:none !important;
+  -webkit-user-select:none !important;
+  touch-action:none !important;
+}
+.wordgrid .cell.selected{
+  background:#d8cf9b !important;
+  box-shadow:inset 0 0 0 2px #8b7b2d !important;
+}
+.wordgrid .cell.found{
+  background:#c6b45a !important;
+  box-shadow:inset 0 0 0 2px #75651f !important;
+}
+.word-search-help{
+  background:#f5f1df;
+  border:1px solid #b8a85e;
+  padding:14px 16px;
+  border-radius:7px;
+  margin:14px 0;
+  line-height:1.5;
+}
+@media(max-width:600px){
+  .wordgrid{gap:2px !important;padding:5px !important}
+  .wordgrid .cell{font-size:11px !important}
+}
+</style>
 </head>
 <body>
 <div class="site-shell">
@@ -211,22 +267,11 @@ Who is telling the truth?</div>
 <div class="clue"><label for="a3">Clue 3: What word means “must have” or “depends on”?</label><input id="a3" autocomplete="off"></div>
 <div class="clue"><label for="a4">Clue 4: What word means the ability or permission to enter or use something?</label><input id="a4" autocomplete="off"></div>
 <h2>Find Your Answers</h2><p>Find all four answers in the word search. They may appear horizontally, vertically, diagonally, forwards, or backwards.</p>
-<div class="wordgrid" id="grid"></div>
+<div class="word-search-help"><strong>HOW TO PLAY:</strong> Click or tap the first letter of a word, then click or tap the last letter. The word will highlight. You can also drag from the first letter to the last. Words may run horizontally, vertically, diagonally, forwards, or backwards.</div>
+  <div class="wordgrid" id="grid"></div>
 <button type="button" id="submit">Unlock Evidence</button><div id="result" aria-live="polite"></div>
 </main>
-<script>
-const rows=['CNFWGEBKOCWKQRN','IDAQJHHBQPJRASF','JAULYUNTBBHKOEQ','ICUSTOMMLNXOATE','CKMMCUTLDRQNNTW','RBLNLIHGRAMAVII','AUETYUEWOZYLONS','SMZHMNASFAQXMGM','ZIXVECQKPFBITHW','FAOECILAFDZOGGY','LLDELQVUVLEMNZW','TSSIXJEHRXWVWYD','YSKURJJLDBNMNQU','UTTSWVIUHJEZOHJ','SXKWJIYHVDNHCID'];const grid=document.getElementById("grid");
-rows.forEach(row=>[...row].forEach(ch=>{const cell=document.createElement("div");cell.className="cell";cell.textContent=ch;grid.appendChild(cell)}));
-function clean(v){return v.trim().toLowerCase().replace(/[^a-z]/g,"")}
-document.getElementById("submit").addEventListener("click",()=>{
-const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
-const accepted=[["custom"],["setting"],["need","needs"],["access"]];const result=document.getElementById("result");
-if(answers.every((v,i)=>accepted[i].includes(v))){
-result.className="success";result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Bonus Evidence Unlocked</h3><p class="message">CUSTOM SETTING NEEDS ACCESS</p><p>Investigators recovered the saved settings from the Adjustable Base remote.</p><p>The custom position used during the crime was not a standard factory setting.</p><p>Someone had created that custom setting before the night of the murder.</p><p>A custom setting needs access to the equipment.</p><p>The question just changed: who had access before the crime?</p></div>`;
-}else{result.className="error";result.innerHTML="<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>";}
-result.style.display="block";result.scrollIntoView({behavior:"smooth",block:"nearest"});
-});
-</script>
+
   </section>
 
   <section class="section">
@@ -234,20 +279,74 @@ result.style.display="block";result.scrollIntoView({behavior:"smooth",block:"nea
 
   <div class="footer">The Case of the Murdered Sleep • Casper Sleep Police</div>
 </div>
-<script>
 
-const rows=['CNFWGEBKOCWKQRN','IDAQJHHBQPJRASF','JAULYUNTBBHKOEQ','ICUSTOMMLNXOATE','CKMMCUTLDRQNNTW','RBLNLIHGRAMAVII','AUETYUEWOZYLONS','SMZHMNASFAQXMGM','ZIXVECQKPFBITHW','FAOECILAFDZOGGY','LLDELQVUVLEMNZW','TSSIXJEHRXWVWYD','YSKURJJLDBNMNQU','UTTSWVIUHJEZOHJ','SXKWJIYHVDNHCID'];const grid=document.getElementById("grid");
-rows.forEach(row=>[...row].forEach(ch=>{const cell=document.createElement("div");cell.className="cell";cell.textContent=ch;grid.appendChild(cell)}));
-function clean(v){return v.trim().toLowerCase().replace(/[^a-z]/g,"")}
-document.getElementById("submit").addEventListener("click",()=>{
-const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
-const accepted=[["custom"],["setting"],["need","needs"],["access"]];const result=document.getElementById("result");
-if(answers.every((v,i)=>accepted[i].includes(v))){
-result.className="success";result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Bonus Evidence Unlocked</h3><p class="message">CUSTOM SETTING NEEDS ACCESS</p><p>Investigators recovered the saved settings from the Adjustable Base remote.</p><p>The custom position used during the crime was not a standard factory setting.</p><p>Someone had created that custom setting before the night of the murder.</p><p>A custom setting needs access to the equipment.</p><p>The question just changed: who had access before the crime?</p></div>`;
-}else{result.className="error";result.innerHTML="<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>";}
-result.style.display="block";result.scrollIntoView({behavior:"smooth",block:"nearest"});
+<script id="fixed-word-search-script">
+const rows=["CNFWGEBKOCWKQRN","IDAQJHHBQPJRASF","JAULYUNTBBHKOEQ","ICUSTOMMLNXOATE","CKMMCUTLDRQNNTW","RBLNLIHGRAMAVII","AUETYUEWOZYLONS","SMZHMNASFAQXMGM","ZIXVECQKPFBITHW","FAOECILAFDZOGGY","LLDELQVUVLEMNZW","TSSIXJEHRXWVWYD","YSKURJJLDBNMNQU","UTTSWVIUHJEZOHJ","SXKWJIYHVDNHCID"];
+const accepted=[["custom"],["setting"],["need","needs"],["access"]];
+const grid=document.getElementById("grid");
+const cells=[];
+rows.forEach((row,r)=>[...row].forEach((ch,c)=>{
+  const cell=document.createElement("button");
+  cell.type="button";
+  cell.className="cell";
+  cell.textContent=ch;
+  cell.dataset.r=r;
+  cell.dataset.c=c;
+  grid.appendChild(cell);
+  cells.push(cell);
+}));
+function clean(value){return value.trim().toLowerCase().replace(/[^a-z]/g,"");}
+function cellAt(r,c){return cells.find(x=>+x.dataset.r===r && +x.dataset.c===c);}
+function getLine(a,b){
+  const ar=+a.dataset.r, ac=+a.dataset.c, br=+b.dataset.r, bc=+b.dataset.c;
+  const dr=br-ar, dc=bc-ac;
+  if(dr!==0 && dc!==0 && Math.abs(dr)!==Math.abs(dc)) return [];
+  const n=Math.max(Math.abs(dr),Math.abs(dc)), sr=Math.sign(dr), sc=Math.sign(dc), out=[];
+  for(let i=0;i<=n;i++) out.push(cellAt(ar+sr*i,ac+sc*i));
+  return out;
+}
+function clearTemp(){cells.forEach(c=>c.classList.remove("selected"));}
+function tryWord(arr){
+  const word=arr.map(c=>c.textContent).join("");
+  const reverse=[...word].reverse().join("");
+  const index=accepted.findIndex(options=>options.some(v=>v.toUpperCase()===word || v.toUpperCase()===reverse));
+  if(index<0){arr.forEach(c=>c.classList.add("selected"));setTimeout(clearTemp,450);return false;}
+  arr.forEach(c=>{c.classList.remove("selected");c.classList.add("found");});
+  const input=document.getElementById("a"+(index+1));
+  if(input) input.value=accepted[index][0];
+  return true;
+}
+let first=null, dragging=false, dragStart=null;
+cells.forEach(cell=>{
+  cell.addEventListener("click",()=>{
+    if(dragging)return;
+    if(first===null){first=cell;clearTemp();cell.classList.add("selected");return;}
+    if(cell===first){first=null;clearTemp();return;}
+    const line=getLine(first,cell);
+    if(line.length)tryWord(line);
+    first=null;clearTemp();
+  });
+  cell.addEventListener("pointerdown",e=>{dragging=true;dragStart=cell;first=null;clearTemp();e.preventDefault();});
 });
-
-</script>
-</body>
+document.addEventListener("pointerup",e=>{
+  if(!dragging)return;
+  dragging=false;
+  const end=e.target.closest(".cell");
+  if(end&&dragStart&&end!==dragStart){const line=getLine(dragStart,end);if(line.length)tryWord(line);}
+  dragStart=null;first=null;clearTemp();
+});
+document.getElementById("submit").addEventListener("click",()=>{
+  const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
+  const result=document.getElementById("result");
+  if(answers.every((v,i)=>accepted[i].some(x=>clean(x)===v))){
+    result.className="success";
+    result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Bonus Evidence Unlocked</h3><p class="message">CUSTOM SETTING NEEDS ACCESS</p><p>Investigators recovered the saved settings from the Adjustable Base remote.</p><p>The custom position used during the crime was not a standard factory setting.</p><p>Someone had created that custom setting before the night of the murder.</p><p>A custom setting needs access to the equipment.</p><p>The question just changed: who had access before the crime?</p></div>`;
+  }else{
+    result.className="error";
+    result.innerHTML=`<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>`;
+  }
+  result.style.display="block";
+  result.scrollIntoView({behavior:"smooth",block:"nearest"});
+});
+</script></body>
 </html>
