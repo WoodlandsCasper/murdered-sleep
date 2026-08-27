@@ -112,13 +112,14 @@ button:hover { background:#444; }
 <script>
 const rows = ['UDHTTRNZSRXYYPY','YSOHATCDJDOAVPV','KGMILLDEZMXQUCX','KCRRJJIEOEUWWSJ','AWLLONSFCMSRPDN','QPZYTPTFMQINSPQ','QZEASHUOYEBWQVD','WTNEPERCPHDUWOV','PWRILRBMVJRZUQW','PZMNGSJIABEUTOZ','QPLGIWPOQYPZNRV','BJKOZDOWWZQIOFN','XPCUIPLDGXNEOAC','ANACOSRCTZGHDTB','YRIVYULEAKVSSYP'];
 const grid = document.getElementById("grid");
-
+const cells = [];
 rows.forEach(row => {
   [...row].forEach(ch => {
     const cell = document.createElement("div");
     cell.className = "cell";
     cell.textContent = ch;
     grid.appendChild(cell);
+cells.push(cell);  
   });
 });
 
