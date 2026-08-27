@@ -35,6 +35,53 @@ button:hover{background:#444}#result{display:none;margin-top:26px;padding:24px;b
 const rows=['VISBYXBLLBBHVRE','ADYZWEBBALXOTSA','ZXMUBDZGPRQWJEE','GOSHAKTSJWEQBDZ','UDDEWBUOOZOKDEE','KBERKALLYPAPSPE','QVMOCMLQPSCWEBX','QWOFZIYEQUHLOUB','VSMEPJVXUCSITWS','GWRBDYKGIXHDGTP','HLYCEOQDTMYOEOX','FCPBVIOZOKNMXDM','IAWBONKHGETAPAD','SVCZMDIQJKGRKQP','ESSETJQAQKALAZR'];const grid=document.getElementById("grid");
 rows.forEach(row=>[...row].forEach(ch=>{const cell=document.createElement("div");cell.className="cell";cell.textContent=ch;grid.appendChild(cell)}));
 function clean(v){return v.trim().toLowerCase().replace(/[^a-z]/g,"")}
+let selecting=false,start=-1;
+let selected=new Set();
+let currentLine=[];
+
+function paint(indices){
+  cells.forEach((c,i)=>c.style.background=selected.has(i)?"#d5d3ce":"#fff");
+  indices.forEach(i=>cells[i].style.background="#d5d3ce");
+}
+
+function getLine(end){
+  if(start<0)return[];
+  const sr=Math.floor(start/15),sc=start%15;
+  const er=Math.floor(end/15),ec=end%15;
+  const dr=er-sr,dc=ec-sc;
+  if(!((dr===0)||(dc===0)||(Math.abs(dr)===Math.abs(dc))))return[];
+  const steps=Math.max(Math.abs(dr),Math.abs(dc));
+  const rs=dr===0?0:Math.sign(dr);
+  const cs=dc===0?0:Math.sign(dc);
+  const line=[];
+  for(let k=0;k<=steps;k++)line.push((sr+rs*k)*15+(sc+cs*k));
+  return line;
+}
+
+cells.forEach((cell,i)=>{
+  cell.addEventListener("pointerdown",e=>{
+    e.preventDefault();
+    selecting=true;
+    start=i;
+    paint([i]);
+  });
+
+  cell.addEventListener("pointermove",e=>{
+    e.preventDefault();
+    if(selecting){
+      currentLine=getLine(i);
+      if(currentLine.length)paint(currentLine);
+    }
+  });
+});
+
+document.addEventListener("pointerup",()=>{
+  if(!selecting)return;
+  if(currentLine.length)currentLine.forEach(i=>selected.add(i));
+  selecting=false;
+  currentLine=[];
+  paint([]);
+});
 document.getElementById("submit").addEventListener("click",()=>{
 const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
 const accepted=[["pillow","pillows"],["moved"],["before"],["demo","demonstration"]];const result=document.getElementById("result");
