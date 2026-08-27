@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>The Case of the Murdered Sleep — Thursday</title>
+<title>The Case of the Murdered Sleep — Friday</title>
 <style>
 :root{--ink:#1e1e1e;--muted:#666;--paper:#fff;--soft:#f3f2ef}
 *{box-sizing:border-box} body{margin:0;padding:24px;background:#e9e7e2;color:var(--ink);font-family:Georgia,"Times New Roman",serif}
@@ -17,26 +17,24 @@ button:hover{background:#444}#result{display:none;margin-top:26px;padding:24px;b
 .small{color:#666;font-size:14px}@media(max-width:600px){body{padding:8px}.page{padding:18px}h1{font-size:27px}.wordgrid{gap:1px;padding:4px}.cell{font-size:10px;padding:5px 0}}
 </style></head><body><main class="page">
 <div class="kicker">CASPER SLEEP POLICE</div><h1>The Case of the Murdered Sleep</h1>
-<div class="subtitle">Thursday Detective Challenge: The False Lead</div>
+<div class="subtitle">Friday Detective Challenge: The Sleep Specialist</div>
 <section class="instructions"><strong>Detective Instructions</strong>
 <p>Solve the four clues below. The answers are not given to you.</p>
 <p>Once you solve each clue, find that answer hidden somewhere in the word search.</p>
 <p>Enter the four answers in the order of the clues. When all four are correct, today's classified evidence will unlock automatically.</p>
 <p class="small">Do not submit your answers to the Game Director. The puzzle will tell you when you have cracked the case.</p></section>
-<h2>Solve the Clues</h2><div class="clue"><label for="a1">Clue 1: What do you call something you do the same way regularly?</label><input id="a1" autocomplete="off"></div>
-<div class="clue"><label for="a2">Clue 2: What word means something that happened or was done in the past?</label><input id="a2" autocomplete="off"></div>
-<div class="clue"><label for="a3">Clue 3: What word means ordinary, usual, or expected?</label><input id="a3" autocomplete="off"></div>
-<div class="clue"><label for="a4">Clue 4: What word means something is correct or true?</label><input id="a4" autocomplete="off"></div>
+<h2>Solve the Clues</h2><div class="clue"><label for="a1">Clue 1: What word means making something fit a person&#x27;s individual needs?</label><input id="a1" autocomplete="off"></div>
+<div class="clue"><label for="a2">Clue 2: What word describes a bed configuration where each side can be adjusted independently?</label><input id="a2" autocomplete="off"></div>
+<div class="clue"><label for="a3">Clue 3: What sleep position raises the head and legs and can create a feeling of weightlessness?</label><input id="a3" autocomplete="off"></div>
+<div class="clue"><label for="a4">Clue 4: What product category is Barry known for demonstrating?</label><input id="a4" autocomplete="off"></div>
 <h2>Find Your Answers</h2><p>Find all four answers in the word search. They may appear horizontally, vertically, diagonally, forwards, or backwards.</p>
 <div class="wordgrid" id="grid"></div>
 <button type="button" id="submit">Unlock Evidence</button><div id="result" aria-live="polite"></div>
 </main>
 <script>
-const rows=['XVAWCSBSLBVEZMP','WSDVKUAZTAVXLBX','XIWLXXKWDYISFLK','EWBUDILAVXPXAYC','WJTODDTMLGLVWQF','OUJICBCNVJPZMCW','RYOJBCSBRIHJPJN','SDZOZRLONYNZMUK','YHSKDLRWMOWPNAB','RQICCLGORNGUYTI','NPCMWIRMUUEVLHK','JGPLZTAFLTIBHDR','GJQDHLLSUCIFAZT','SOVGRZBSLOTNTJG','MMYLMDDQMIHZEWO'];
-const grid=document.getElementById("grid");
+const rows=['PERSONALIZATION','ADJUSTABLEBASES','ZEROGRAVITYUDAX','IHHEXDVXRCSNBAC','GHQTSARGWUWRNHO','SIZAYPZFWNKIEGY','KDCMDLLLTIZBXOR','DMCRJUTILSGWCBV','HYJCHDMITOULFLL','GVIWVUCTUFRXHFO','MIUWRHVKYYBHBZK','MICGSWKGUPMUOEI','EHXRRIXSNSMLHEQ','PCYBDEUFZVNTCMM','TOQIRAVXDVRYIYU'];
 const cells=[];
 rows.forEach(row=>[...row].forEach(ch=>{const cell=document.createElement("div");cell.className="cell";cell.textContent=ch;grid.appendChild(cell);cells.push(cell)}));
-
 let selecting=false,start=-1;
 let selected=new Set();
 let currentLine=[];
@@ -47,14 +45,14 @@ function paint(indices){
 }
 
 function getLine(end){
-  if(start<0)return [];
+  if(start<0)return[];
   const sr=Math.floor(start/15),sc=start%15;
   const er=Math.floor(end/15),ec=end%15;
   const dr=er-sr,dc=ec-sc;
-  if(!(dr===0||dc===0||Math.abs(dr)===Math.abs(dc)))return [];
+  if(!(dr===0||dc===0||Math.abs(dr)===Math.abs(dc)))return[];
+  const rs=dr===0?0:dr>0?1:-1;
+  const cs=dc===0?0:dc>0?1:-1;
   const steps=Math.max(Math.abs(dr),Math.abs(dc));
-  const rs=dr===0?0:Math.sign(dr);
-  const cs=dc===0?0:Math.sign(dc);
   const line=[];
   for(let k=0;k<=steps;k++)line.push((sr+rs*k)*15+(sc+cs*k));
   return line;
@@ -65,41 +63,35 @@ cells.forEach((cell,i)=>{
     e.preventDefault();
     selecting=true;
     start=i;
-    
-    paint([i]);
+    currentLine=[i];
+    paint(currentLine);
   });
+
   cell.addEventListener("pointermove",e=>{
-  e.preventDefault();
-  if(selecting){
-    currentLine=getLine(i);
-    if(currentLine.length)paint(currentLine);
-  }
+    if(!selecting)return;
+    const line=getLine(i);
+    if(currentLine.length)paint(line);
+    currentLine=line;
+  });
 });
 
 document.addEventListener("pointerup",()=>{
   if(!selecting)return;
-  if(currentLine.length){
-    currentLine.forEach(i=>selected.add(i));
-  }
   selecting=false;
+  currentLine.forEach(i=>selected.add(i));
   currentLine=[];
-  paint([]);
 });
-
 function clean(v){return v.trim().toLowerCase().replace(/[^a-z]/g,"")}
-
 document.getElementById("submit").addEventListener("click",()=>{
-  const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
-  const accepted=[["routine","routines"],["was"],["normal"],["valid"]];
-  const result=document.getElementById("result");
-  if(answers.every((v,i)=>accepted[i].includes(v))){
-    result.className="success";
-    result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Bonus Evidence Unlocked</h3><p class="message">ROUTINE WAS NORMAL VALID</p><p>Investigators checked Nora&#x27;s previous closing checklists.</p><p>The suspicious-looking remote instruction appears on her normal closing routine.</p><p>It was not added because of the murder.</p><p>Nora&#x27;s routine was normal and her alibi remains valid.</p><p>The clue pointing toward Nora was a false lead.</p><p>Now detectives must ask: who knew Nora&#x27;s routine well enough to make her look guilty?</p></div>`;
-  }else{
-    result.className="error";
-    result.innerHTML="<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>";
-  }
-  result.style.display="block";
-  result.scrollIntoView({behavior:"smooth",block:"nearest"});
+const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
+const accepted=[["personalization"],["split"],["zerogravity"],["adjustablebases"]];
+if(answers.every((v,i)=>accepted[i].includes(v))){
+result.className="success";result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Final Evidence Unlocked</h3><p class="message">PERSONALIZATION SPLIT ZERO BASE</p><p>Investigators have reconstructed the entire overnight demonstration.</p>
+<p>It centered on personalization, Split positioning, Zero Gravity, and the Adjustable Base.</p>
+<p>Those four elements are closely associated with Barry&#x27;s daily demonstrations.</p>
+<p>The evidence now points strongly toward Barry.</p>
+<p>But the detectives still have one final question: why would Barry stage the entire crime?</p></div>`;
+}else{result.className="error";result.innerHTML="<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>";}
+result.style.display="block";result.scrollIntoView({behavior:"smooth",block:"nearest"});
 });
 </script></body></html>
