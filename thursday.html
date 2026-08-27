@@ -32,7 +32,7 @@ button:hover{background:#444}#result{display:none;margin-top:26px;padding:24px;b
 <button type="button" id="submit">Unlock Evidence</button><div id="result" aria-live="polite"></div>
 </main>
 <script>
-const rows=['XVAWCSBSLBVEZMP','WSDVKUAZTAVXLBX','XIWLXXKWDYISFLK','EWBUDILAVXPXAYC','WJTODDTMLGLVWQF','OUJICBCNVJPZMCW','RYOJBCSBRIHJPJN','SDZOZRLONYNZMUK','YHSKDLRWMOWPNAB','RQICCLGORNGUYTI','NPCMWIRMUUEVLHK','JGPLZTAFLTIBHDR','GJQDHLLSUCIFAZT','SOVGRZBSLOTNTJG','MMYLMDDQMIHZEWO'];
+const rows=['ROUTINEASLLRCYC','FALSELEADZUARJJ','RLHEHALIBIGWXZV','MBGGTINNOCENTBD','ZZKRPVEWLEBCIHP','LPAHSMUKMPOLVTQ','XVVOXGALPFUATBU','KNQWPMIZKXQWTAW','JLMPUTYZWGFKHMZ','QCZBBUAZOKETWND','EXSPPUKJIQUWIKR','GQZRLOVCNMCAXFD','IFGCTCVKGXZZFIQ','TWUBUSBUIEEQQTH','MECLCSGMPLVFALS'];
 const grid=document.getElementById("grid");
 const cells=[];
 rows.forEach(row=>[...row].forEach(ch=>{const cell=document.createElement("div");cell.className="cell";cell.textContent=ch;grid.appendChild(cell);cells.push(cell)}));
@@ -90,11 +90,11 @@ function clean(v){return v.trim().toLowerCase().replace(/[^a-z]/g,"")}
 
 document.getElementById("submit").addEventListener("click",()=>{
   const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
-  const accepted=[["routine","routines"],["was"],["normal"],["valid"]];
+  const accepted=[["routine"],["falselead"],["alibi"],["innocent"]];
   const result=document.getElementById("result");
   if(answers.every((v,i)=>accepted[i].includes(v))){
     result.className="success";
-    result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Bonus Evidence Unlocked</h3><p class="message">ROUTINE WAS NORMAL VALID</p><p>Investigators checked Nora&#x27;s previous closing checklists.</p><p>The suspicious-looking remote instruction appears on her normal closing routine.</p><p>It was not added because of the murder.</p><p>Nora&#x27;s routine was normal and her alibi remains valid.</p><p>The clue pointing toward Nora was a false lead.</p><p>Now detectives must ask: who knew Nora&#x27;s routine well enough to make her look guilty?</p></div>`;
+    result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Bonus Evidence Unlocked</h3><p class="message">ROUTINE - FALSE LEAD - ALIBI - INNOCENT</p><p>Investigators checked Nora&#x27;s previous closing checklists.</p><p>The suspicious-looking remote instruction appears on her normal closing routine.</p><p>It was not added because of the murder.</p><p>Nora&#x27;s routine was normal and her alibi remains valid.</p><p>The clue pointing toward Nora was a false lead.</p><p>Now detectives must ask: who knew Nora&#x27;s routine well enough to make her look guilty?</p></div>`;
   }else{
     result.className="error";
     result.innerHTML="<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>";
