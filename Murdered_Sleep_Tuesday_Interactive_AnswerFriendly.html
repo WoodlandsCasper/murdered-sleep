@@ -33,7 +33,72 @@ button{display:block;margin:25px auto 0;padding:14px 28px;border:0;background:#2
 </main>
 <script>
 const rows=['CNFWGEBKOCWKQRN','IDAQJHHBQPJRASF','JAULYUNTBBHKOEQ','ICUSTOMMLNXOATE','CKMMCUTLDRQNNTW','RBLNLIHGRAMAVII','AUETYUEWOZYLONS','SMZHMNASFAQXMGM','ZIXVECQKPFBITHW','FAOECILAFDZOGGY','LLDELQVUVLEMNZW','TSSIXJEHRXWVWYD','YSKURJJLDBNMNQU','UTTSWVIUHJEZOHJ','SXKWJIYHVDNHCID'];const grid=document.getElementById("grid");
-rows.forEach(row=>[...row].forEach(ch=>{const cell=document.createElement("div");cell.className="cell";cell.textContent=ch;grid.appendChild(cell)}));
+rows.forEach((row,r)=>{
+  [...row].forEach((ch,c)=>{
+    const cell=document.createElement("div");
+    cell.className="cell";
+    cell.textContent=ch;
+    cell.dataset.index=r*15+c;
+    grid.appendChild(cell);
+  });
+});
+
+const cells=[...grid.children];
+let selecting=false;
+let start=-1;
+let selected=new Set();
+
+function paint(indices){
+  cells.forEach((cell,i)=>{
+    cell.style.background=selected.has(i)?"#d5d3ce":"#fff";
+  });
+  indices.forEach(i=>{
+    if(i>=0 && i<cells.length) cells[i].style.background="#d5d3ce";
+  });
+}
+
+function getLine(end){
+  if(start<0)return[];
+  const sr=Math.floor(start/15),sc=start%15;
+  const er=Math.floor(end/15),ec=end%15;
+  const dr=er-sr,dc=ec-sc;
+  if(dr===0 && dc===0)return[start];
+  if(Math.abs(dr)!==Math.abs(dc) && dr!==0 && dc!==0)return[];
+  const rs=dr===0?0:(dr>0?1:-1);
+  const cs=dc===0?0:(dc>0?1:-1);
+  const steps=Math.max(Math.abs(dr),Math.abs(dc));
+  const line=[];
+  for(let k=0;k<=steps;k++) line.push((sr+rs*k)*15+(sc+cs*k));
+  return line;
+}
+
+cells.forEach((cell,i)=>{
+  cell.addEventListener("pointerdown",e=>{
+    e.preventDefault();
+    selecting=true;
+    start=i;
+    selected.clear();
+    const line=getLine(i);
+    line.forEach(x=>selected.add(x));
+    paint(line);
+  });
+
+cell.addEventListener("pointerenter",e=>{
+  if(!selecting)return;
+  const line=getLine(i);
+  if(line.length){
+    selected.clear();
+    line.forEach(x=>selected.add(x));
+    paint(line);
+  }
+});
+
+document.addEventListener("pointerup",()=>{
+  if(!selecting)return;
+  selecting=false;
+  paint([...selected]);
+});
+});
 function clean(v){return v.trim().toLowerCase().replace(/[^a-z]/g,"")}
 document.getElementById("submit").addEventListener("click",()=>{
 const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
