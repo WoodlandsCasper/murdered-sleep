@@ -32,18 +32,76 @@ button:hover{background:#444}#result{display:none;margin-top:26px;padding:24px;b
 <button type="button" id="submit">Unlock Evidence</button><div id="result" aria-live="polite"></div>
 </main>
 <script>
-const rows=['XVAWCSBSLBVEZMP','WSDVKUAZTAVXLBX','XIWLXXKWDYISFLK','EWBUDILAVXPXAYC','WJTODDTMLGLVWQF','OUJICBCNVJPZMCW','RYOJBCSBRIHJPJN','SDZOZRLONYNZMUK','YHSKDLRWMOWPNAB','RQICCLGORNGUYTI','NPCMWIRMUUEVLHK','JGPLZTAFLTIBHDR','GJQDHLLSUCIFAZT','SOVGRZBSLOTNTJG','MMYLMDDQMIHZEWO'];const grid=document.getElementById("grid");
-rows.forEach(row=>[...row].forEach(ch=>{const cell=document.createElement("div");cell.className="cell";cell.textContent=ch;grid.appendChild(cell)}));
-let selecting=false,start=-1;const cells=[...document.querySelectorAll(".cell")];function clearCells(){cells.forEach(c=>c.style.background="#fff")}function drawLine(end){const sr=Math.floor(start/15),sc=start%15,er=Math.floor(end/15),ec=end%15,dr=er-sr,dc=ec-sc;if(!(dr===0||dc===0||Math.abs(dr)===Math.abs(dc)))return;clearCells();const steps=Math.max(Math.abs(dr),Math.abs(dc)),rs=dr===0?0:Math.sign(dr),cs=dc===0?0:Math.sign(dc);for(let k=0;k<=steps;k++)cells[(sr+rs*k)*15+(sc+cs*k)].style.background="#d5d3ce"}cells.forEach((c,i)=>{c.addEventListener("pointerdown",e=>{e.preventDefault();selecting=true;start=i;clearCells();c.style.background="#d5d3ce"});c.addEventListener("pointerenter",()=>{if(selecting)drawLine(i)})});document.addEventListener("pointerup",()=>selecting=false);  
-const accepted=[["routine","routines"],["was"],["normal"],["valid"]];const result=document.getElementById("result");
-if(answers.every((v,i)=>accepted[i].includes(v))){
-result.className="success";result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Bonus Evidence Unlocked</h3><p class="message">ROUTINE WAS NORMAL VALID</p><p>Investigators checked Nora&#x27;s previous closing checklists.</p>
-<p>The suspicious-looking remote instruction appears on her normal closing routine.</p>
-<p>It was not added because of the murder.</p>
-<p>Nora&#x27;s routine was normal and her alibi remains valid.</p>
-<p>The clue pointing toward Nora was a false lead.</p>
-<p>Now detectives must ask: who knew Nora&#x27;s routine well enough to make her look guilty?</p></div>`;
-}else{result.className="error";result.innerHTML="<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>";}
-result.style.display="block";result.scrollIntoView({behavior:"smooth",block:"nearest"});
+const rows=['XVAWCSBSLBVEZMP','WSDVKUAZTAVXLBX','XIWLXXKWDYISFLK','EWBUDILAVXPXAYC','WJTODDTMLGLVWQF','OUJICBCNVJPZMCW','RYOJBCSBRIHJPJN','SDZOZRLONYNZMUK','YHSKDLRWMOWPNAB','RQICCLGORNGUYTI','NPCMWIRMUUEVLHK','JGPLZTAFLTIBHDR','GJQDHLLSUCIFAZT','SOVGRZBSLOTNTJG','MMYLMDDQMIHZEWO'];
+const grid=document.getElementById("grid");
+const cells=[];
+rows.forEach(row=>[...row].forEach(ch=>{const cell=document.createElement("div");cell.className="cell";cell.textContent=ch;grid.appendChild(cell);cells.push(cell)}));
+
+let selecting=false,start=-1;
+let selected=new Set();
+let currentLine=[];
+
+function paint(indices){
+  cells.forEach((c,i)=>c.style.background=selected.has(i)?"#d5d3ce":"#fff");
+  indices.forEach(i=>cells[i].style.background="#d5d3ce");
+}
+
+function getLine(end){
+  if(start<0)return [];
+  const sr=Math.floor(start/15),sc=start%15;
+  const er=Math.floor(end/15),ec=end%15;
+  const dr=er-sr,dc=ec-sc;
+  if(!(dr===0||dc===0||Math.abs(dr)===Math.abs(dc)))return [];
+  const steps=Math.max(Math.abs(dr),Math.abs(dc));
+  const rs=dr===0?0:Math.sign(dr);
+  const cs=dc===0?0:Math.sign(dc);
+  const line=[];
+  for(let k=0;k<=steps;k++)line.push((sr+rs*k)*15+(sc+cs*k));
+  return line;
+}
+
+cells.forEach((cell,i)=>{
+  cell.addEventListener("pointerdown",e=>{
+    e.preventDefault();
+    selecting=true;
+    start=i;
+    
+    paint([i]);
+  });
+  cell.addEventListener("pointerenter",()=>{
+    e.preventDefault();
+    if(selecting){
+      const line=getLine(i);
+      if(line.length)paint(line);
+    }
+  });
+});
+
+document.addEventListener("pointerup",()=>{
+  if(!selecting)return;
+  const active=cells.findIndex(c=>c.style.background!=="rgb(255, 255, 255)"&&c.style.background!=="#fff");
+  if(active>=0){
+    const line=getLine(active);
+    line.forEach(i=>selected.add(i));
+  }
+  selecting=false;
+  paint([]);
+});
+
+function clean(v){return v.trim().toLowerCase().replace(/[^a-z]/g,"")}
+
+document.getElementById("submit").addEventListener("click",()=>{
+  const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
+  const accepted=[["routine","routines"],["was"],["normal"],["valid"]];
+  const result=document.getElementById("result");
+  if(answers.every((v,i)=>accepted[i].includes(v))){
+    result.className="success";
+    result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Bonus Evidence Unlocked</h3><p class="message">ROUTINE WAS NORMAL VALID</p><p>Investigators checked Nora&#x27;s previous closing checklists.</p><p>The suspicious-looking remote instruction appears on her normal closing routine.</p><p>It was not added because of the murder.</p><p>Nora&#x27;s routine was normal and her alibi remains valid.</p><p>The clue pointing toward Nora was a false lead.</p><p>Now detectives must ask: who knew Nora&#x27;s routine well enough to make her look guilty?</p></div>`;
+  }else{
+    result.className="error";
+    result.innerHTML="<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>";
+  }
+  result.style.display="block";
+  result.scrollIntoView({behavior:"smooth",block:"nearest"});
 });
 </script></body></html>
