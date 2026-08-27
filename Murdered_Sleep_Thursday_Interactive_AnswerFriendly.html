@@ -68,7 +68,7 @@ cells.forEach((cell,i)=>{
     
     paint([i]);
   });
-  cell.addEventListener("pointermove",()=>{
+  cell.addEventListener("pointermove",(e)=>{
     e.preventDefault();
     if(selecting){
       currentLine=getLine(i);
