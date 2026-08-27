@@ -47,7 +47,7 @@ const cells=[...grid.children];
 let selecting=false;
 let start=-1;
 let selected=new Set();
-
+let currentLine=[];
 function paint(indices){
   cells.forEach((cell,i)=>{
     cell.style.background=selected.has(i)?"#d5d3ce":"#fff";
@@ -77,7 +77,7 @@ cells.forEach((cell,i)=>{
     e.preventDefault();
     selecting=true;
     start=i;
-    selected.clear();
+ 
     const line=getLine(i);
     line.forEach(x=>selected.add(x));
     paint(line);
@@ -87,7 +87,7 @@ cell.addEventListener("pointerenter",e=>{
   if(!selecting)return;
   const line=getLine(i);
   if(line.length){
-    selected.clear();
+    
     line.forEach(x=>selected.add(x));
     paint(line);
   }
