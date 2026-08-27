@@ -68,23 +68,21 @@ cells.forEach((cell,i)=>{
     
     paint([i]);
   });
-  cell.addEventListener("pointermove",(e)=>{
-    e.preventDefault();
-    if(selecting){
-      currentLine=getLine(i);
-      if(currentLine.length)paint(currentLine);
-    }
-  });
+  cell.addEventListener("pointermove",e=>{
+  e.preventDefault();
+  if(selecting){
+    currentLine=getLine(i);
+    if(currentLine.length)paint(currentLine);
+  }
 });
 
 document.addEventListener("pointerup",()=>{
   if(!selecting)return;
-  const active=cells.findIndex(c=>c.style.background!=="rgb(255, 255, 255)"&&c.style.background!=="#fff");
-  if(active>=0){
-    const line=getLine(active);
-    currentline.forEach(i=>selected.add(i));
+  if(currentLine.length){
+    currentLine.forEach(i=>selected.add(i));
   }
   selecting=false;
+  currentLine=[];
   paint([]);
 });
 
