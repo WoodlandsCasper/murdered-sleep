@@ -33,7 +33,16 @@ button:hover{background:#444}#result{display:none;margin-top:26px;padding:24px;b
 </main>
 <script>
 const rows=['VISBYXBLLBBHVRE','ADYZWEBBALXOTSA','ZXMUBDZGPRQWJEE','GOSHAKTSJWEQBDZ','UDDEWBUOOZOKDEE','KBERKALLYPAPSPE','QVMOCMLQPSCWEBX','QWOFZIYEQUHLOUB','VSMEPJVXUCSITWS','GWRBDYKGIXHDGTP','HLYCEOQDTMYOEOX','FCPBVIOZOKNMXDM','IAWBONKHGETAPAD','SVCZMDIQJKGRKQP','ESSETJQAQKALAZR'];const grid=document.getElementById("grid");
-rows.forEach(row=>[...row].forEach(ch=>{const cell=document.createElement("div");cell.className="cell";cell.textContent=ch;grid.appendChild(cell)}));
+const grid=document.getElementById("grid");
+const cells=[];
+
+rows.forEach(row=>[...row].forEach(ch=>{
+  const cell=document.createElement("div");
+  cell.className="cell";
+  cell.textContent=ch;
+  grid.appendChild(cell);
+  cells.push(cell);
+}));
 function clean(v){return v.trim().toLowerCase().replace(/[^a-z]/g,"")}
 let selecting=false,start=-1;
 let selected=new Set();
