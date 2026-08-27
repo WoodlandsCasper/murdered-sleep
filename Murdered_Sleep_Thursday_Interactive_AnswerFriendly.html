@@ -71,8 +71,8 @@ cells.forEach((cell,i)=>{
   cell.addEventListener("pointerenter",()=>{
     e.preventDefault();
     if(selecting){
-      const line=getLine(i);
-      if(line.length)paint(line);
+      currentLine=getLine(i);
+      if(currentLine.length)paint(currentLine);
     }
   });
 });
@@ -82,7 +82,7 @@ document.addEventListener("pointerup",()=>{
   const active=cells.findIndex(c=>c.style.background!=="rgb(255, 255, 255)"&&c.style.background!=="#fff");
   if(active>=0){
     const line=getLine(active);
-    line.forEach(i=>selected.add(i));
+    currentline.forEach(i=>selected.add(i));
   }
   selecting=false;
   paint([]);
