@@ -235,21 +235,149 @@ But who?</div>
 <button type="button" id="submit">Unlock Evidence</button><div id="result" aria-live="polite"></div>
 </main>
 <script>
-const rows=['GCGXAPWRLNBWOHY','QURRBEXNOOGZUMF','KIIYVRECJOKVOPR','PQDSUSJJURUICTP','DSHUXOWUFEFLXJO','BMXGXNKDHZLLFZU','JFVTOACECNOTXOT','WAPMZLOSLHIWSDZ','GDEMJIDAHPYPPDG','NTNKKZNBIWICLMF','BXZJZABJUUPEIHE','YPVTXTVVUQHTTLR','HFHCUIAJHTQOGJU','DTJBEODOFGHFEGG','NVEHONZIXPQGYEI'];const grid=document.getElementById("grid");
-rows.forEach(row=>[...row].forEach(ch=>{const cell=document.createElement("div");cell.className="cell";cell.textContent=ch;grid.appendChild(cell)}));
-function clean(v){return v.trim().toLowerCase().replace(/[^a-z]/g,"")}
-document.getElementById("submit").addEventListener("click",()=>{
-const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
-const accepted=[["personalization"],["split"],["zero gravity"],["adjustable base"]];
-if(answers.every((v,i)=>accepted[i].includes(v))){
-result.className="success";result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Final Evidence Unlocked</h3><p class="message">PERSONALIZATION SPLIT ZERO BASE</p><p>Investigators have reconstructed the entire overnight demonstration.</p>
-<p>It centered on personalization, Split positioning, Zero Gravity, and the Adjustable Base.</p>
-<p>Those four elements are closely associated with Barry&#x27;s daily demonstrations.</p>
-<p>The evidence now points strongly toward Barry.</p>
-<p>But the detectives still have one final question: why would Barry stage the entire crime?</p></div>`;
-}else{result.className="error";result.innerHTML="<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>";}
-result.style.display="block";result.scrollIntoView({behavior:"smooth",block:"nearest"});
+const rows=[
+'PERSONALIZATION',
+'ESABELBATSUJDAU',
+'DAXIHHEXDVXRCSN',
+'BAZCGHQTARGWUWR',
+'NHEOSIZAYZFWNKI',
+'EGRYKDCMDLLTIZB',
+'XOORDMCRJUTLSGW',
+'CBGVHYJCHDMIOUL',
+'FLRLGVIWVUCTUFR',
+'XHAFOMIUWRHVKYY',
+'BHVBSZKMICGSWKG',
+'UPIMUPOEIEHXRRI',
+'XSTNSMLLHEQPCYB',
+'DEYUFZVINTCMMTO',
+'QIRAVXDVTRYIYUK'
+];
+
+const grid=document.getElementById('grid');
+rows.forEach(row=>{
+  [...row].forEach(ch=>{
+    const cell=document.createElement('div');
+    cell.className='cell';
+    cell.textContent=ch;
+    grid.appendChild(cell);
+  });
 });
+
+let selecting=false;
+let startIndex=null;
+let currentSelection=[];
+
+function clearSelection(){
+  currentSelection.forEach(i=>{
+    grid.children[i].classList.remove('selected');
+  });
+  currentSelection=[];
+  startIndex=null;
+}
+
+function getLine(start,end){
+  const r1=Math.floor(start/15);
+  const c1=start%15;
+  const r2=Math.floor(end/15);
+  const c2=end%15;
+
+  const dr=Math.sign(r2-r1);
+  const dc=Math.sign(c2-c1);
+
+  const distance=Math.max(Math.abs(r2-r1),Math.abs(c2-c1));
+
+  if(
+    !(r1===r2 || c1===c2 || Math.abs(r2-r1)===Math.abs(c2-c1))
+  ){
+    return [];
+  }
+
+  const result=[];
+  for(let i=0;i<=distance;i++){
+    result.push((r1+dr*i)*15+(c1+dc*i));
+  }
+  return result;
+}
+
+function paint(indices){
+  clearSelection();
+  currentSelection=indices;
+  indices.forEach(i=>{
+    grid.children[i].classList.add('selected');
+  });
+}
+
+grid.querySelectorAll('.cell').forEach((cell,i)=>{
+  cell.addEventListener('pointerdown',e=>{
+    e.preventDefault();
+    selecting=true;
+    startIndex=i;
+    paint([i]);
+  });
+
+  cell.addEventListener('pointerenter',()=>{
+    if(!selecting) return;
+    const line=getLine(startIndex,i);
+    if(line.length) paint(line);
+  });
+});
+
+document.addEventListener('pointerup',()=>{
+  if(!selecting) return;
+
+  selecting=false;
+
+  if(currentSelection.length){
+    const word=currentSelection
+      .map(i=>grid.children[i].textContent)
+      .join('')
+      .toLowerCase();
+
+    const reversed=[...word].reverse().join('');
+
+    const valid=[
+      'personalization',
+      'split',
+      'zerogravity',
+      'adjustablebase'
+    ];
+
+    if(valid.includes(word) || valid.includes(reversed)){
+      currentSelection.forEach(i=>{
+        grid.children[i].classList.add('found');
+      });
+    }else{
+      clearSelection();
+    }
+  }
+});
+
+document.getElementById('submit').addEventListener('click',()=>{
+  const answers=[1,2,3,4].map(i=>
+    document.getElementById('a'+i).value.trim().toLowerCase()
+  );
+
+  const accepted=[
+    ['personalization','personalisation'],
+    ['split'],
+    ['zero gravity','zerogravity'],
+    ['adjustable base','adjustablebase']
+  ];
+
+  const result=document.getElementById('result');
+
+  if(answers.every((v,i)=>accepted[i].includes(v))){
+    result.className='success';
+    result.innerHTML='<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Final Evidence Unlocked</h3><p class="message">PERSONALIZATION • SPLIT • ZERO GRAVITY • ADJUSTABLE BASE</p><p>Investigators have reconstructed the demonstration. The evidence points strongly toward Barry.</p><p>The culprit was not trying to destroy Casper. They were demonstrating a complete approach to sleep: position, support, comfort, and sleep.</p><p><strong>The final question remains: why would Barry stage the entire crime?</strong></p></div>';
+  }else{
+    result.className='error';
+    result.innerHTML='<h3>ACCESS DENIED</h3><p>One or more answers is incorrect. Go back to the clues and try again.</p>';
+  }
+
+  result.style.display='block';
+  result.scrollIntoView({behavior:'smooth',block:'nearest'});
+});
+</script>
 </script>
   </section>
 
@@ -259,24 +387,6 @@ result.style.display="block";result.scrollIntoView({behavior:"smooth",block:"nea
 
   <div class="footer">The Case of the Murdered Sleep • Casper Sleep Police</div>
 </div>
-<script>
 
-const rows=['GCGXAPWRLNBWOHY','QURRBEXNOOGZUMF','KIIYVRECJOKVOPR','PQDSUSJJURUICTP','DSHUXOWUFEFLXJO','BMXGXNKDHZLLFZU','JFVTOACECNOTXOT','WAPMZLOSLHIWSDZ','GDEMJIDAHPYPPDG','NTNKKZNBIWICLMF','BXZJZABJUUPEIHE','YPVTXTVVUQHTTLR','HFHCUIAJHTQOGJU','DTJBEODOFGHFEGG','NVEHONZIXPQGYEI'];const grid=document.getElementById("grid");
-rows.forEach(row=>[...row].forEach(ch=>{const cell=document.createElement("div");cell.className="cell";cell.textContent=ch;grid.appendChild(cell)}));
-function clean(v){return v.trim().toLowerCase().replace(/[^a-z]/g,"")}
-document.getElementById("submit").addEventListener("click",()=>{
-const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
-const accepted=[["personalization","personalisation"],["split"],["zero"],["base","bases"]];const result=document.getElementById("result");
-if(answers.every((v,i)=>accepted[i].includes(v))){
-result.className="success";result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Final Evidence Unlocked</h3><p class="message">PERSONALIZATION SPLIT ZERO BASE</p><p>Investigators have reconstructed the entire overnight demonstration.</p>
-<p>It centered on personalization, Split positioning, Zero Gravity, and the Adjustable Base.</p>
-<p>Those four elements are closely associated with Barry&#x27;s daily demonstrations.</p>
-<p>The evidence now points strongly toward Barry.</p>
-<p>But the detectives still have one final question: why would Barry stage the entire crime?</p></div>`;
-}else{result.className="error";result.innerHTML="<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>";}
-result.style.display="block";result.scrollIntoView({behavior:"smooth",block:"nearest"});
-});
-
-</script>
 </body>
 </html>
