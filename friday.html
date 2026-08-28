@@ -240,7 +240,7 @@ rows.forEach(row=>[...row].forEach(ch=>{const cell=document.createElement("div")
 function clean(v){return v.trim().toLowerCase().replace(/[^a-z]/g,"")}
 document.getElementById("submit").addEventListener("click",()=>{
 const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
-const accepted=[["personalization","personalisation"],["split"],["zero"],["base","bases"]];const result=document.getElementById("result");
+const accepted=[["personalization"],["split"],["zero gravity"],["adjustable base"]];
 if(answers.every((v,i)=>accepted[i].includes(v))){
 result.className="success";result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Final Evidence Unlocked</h3><p class="message">PERSONALIZATION SPLIT ZERO BASE</p><p>Investigators have reconstructed the entire overnight demonstration.</p>
 <p>It centered on personalization, Split positioning, Zero Gravity, and the Adjustable Base.</p>
