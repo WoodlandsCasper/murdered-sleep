@@ -312,15 +312,14 @@ function paint(indices){
 }
 
 grid.querySelectorAll('.cell').forEach((cell,i)=>{
-
-  cell.addEventListener('mousedown',e=>{
+  cell.addEventListener('pointerdown',e=>{
     e.preventDefault();
     selecting=true;
     startIndex=i;
     paint([i]);
   });
 
-  cell.addEventListener('mouseenter',()=>{
+  cell.addEventListener('pointerenter',e=>{
     if(!selecting) return;
 
     const line=getLine(startIndex,i);
@@ -331,7 +330,7 @@ grid.querySelectorAll('.cell').forEach((cell,i)=>{
   });
 });
 
-document.addEventListener('mouseup',()=>{
+document.addEventListener('pointerup',()=>{
   if(!selecting) return;
 
   selecting=false;
