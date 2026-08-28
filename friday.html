@@ -284,74 +284,82 @@ function getLine(start,end){
   const dr=Math.sign(r2-r1);
   const dc=Math.sign(c2-c1);
 
-  const distance=Math.max(Math.abs(r2-r1),Math.abs(c2-c1));
-
-  if(
-    !(r1===r2 || c1===c2 || Math.abs(r2-r1)===Math.abs(c2-c1))
-  ){
+  if(r1!==r2 && c1!==c2 && Math.abs(r2-r1)!==Math.abs(c2-c1)){
     return [];
   }
 
+  const distance=Math.max(
+    Math.abs(r2-r1),
+    Math.abs(c2-c1)
+  );
+
   const result=[];
+
   for(let i=0;i<=distance;i++){
     result.push((r1+dr*i)*15+(c1+dc*i));
   }
+
   return result;
 }
 
 function paint(indices){
   clearSelection();
   currentSelection=indices;
+
   indices.forEach(i=>{
     grid.children[i].classList.add('selected');
   });
 }
 
 grid.querySelectorAll('.cell').forEach((cell,i)=>{
-  cell.addEventListener('pointerdown',e=>{
+
+  cell.addEventListener('mousedown',e=>{
     e.preventDefault();
     selecting=true;
     startIndex=i;
     paint([i]);
   });
 
-  cell.addEventListener('pointerenter',()=>{
+  cell.addEventListener('mouseenter',()=>{
     if(!selecting) return;
+
     const line=getLine(startIndex,i);
-    if(line.length) paint(line);
+
+    if(line.length){
+      paint(line);
+    }
   });
 });
 
-document.addEventListener('pointerup',()=>{
+document.addEventListener('mouseup',()=>{
   if(!selecting) return;
 
   selecting=false;
 
-  if(currentSelection.length){
-    const word=currentSelection
-      .map(i=>grid.children[i].textContent)
-      .join('')
-      .toLowerCase();
+  if(!currentSelection.length) return;
 
-    const reversed=[...word].reverse().join('');
+  const word=currentSelection
+    .map(i=>grid.children[i].textContent)
+    .join('')
+    .toLowerCase();
 
-    const valid=[
-      'personalization',
-      'split',
-      'zerogravity',
-      'adjustablebase'
-    ];
+  const reversed=[...word].reverse().join('');
 
-    if(valid.includes(word) || valid.includes(reversed)){
-      currentSelection.forEach(i=>{
-        grid.children[i].classList.add('found');
-      });
-    }else{
-      clearSelection();
-    }
+  const valid=[
+    'personalization',
+    'split',
+    'zerogravity',
+    'adjustablebase'
+  ];
+
+  if(valid.includes(word) || valid.includes(reversed)){
+    currentSelection.forEach(i=>{
+      grid.children[i].classList.add('found');
+    });
+  }else{
+    clearSelection();
   }
 });
-
 document.getElementById('submit').addEventListener('click',()=>{
   const answers=[1,2,3,4].map(i=>
     document.getElementById('a'+i).value.trim().toLowerCase()
