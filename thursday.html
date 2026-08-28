@@ -32,31 +32,74 @@ button:hover{background:#444}#result{display:none;margin-top:26px;padding:24px;b
 <button type="button" id="submit">Unlock Evidence</button><div id="result" aria-live="polite"></div>
 </main>
 <script>
-const rows=['ROUTINEASLRCYCZ','FALSELEADZUARJJ','RLHEHALIBIGWXZV','MBGGTINNOCENTBD','ZZKRPVEWLEBCIHP','LPAHSMUKMPOLVTQ','YXV0XGALPFUATBU','KNQWPMIZKXQWTAW','JLMPUTYZWGFKHMZ','QCZBBUAZOKETWND','EXSPPUKJQUWIKRX','QGZRL0VCNMCAXFD','IFGCTCBYIDWAKMT','SOVGRZBSLOTNTJG','MYMLDDQMIHZEW0Z'];
+<script>
+const rows=[
+'ROUTINEASLRCYCZ',
+'FALSELEADZUARJJ',
+'RLHEHALIBIGWXZV',
+'MBGGTINNOCENTBD',
+'ZZKRPVEWLEBCIHP',
+'LPAHSMUKMPOLVTQ',
+'YXVXGALPFUATBUQ',
+'KNQWPMIZKXQWTAW',
+'JLMPUTYZWGFKHMZ',
+'QCZBBUAZOKETWND',
+'EXSPPUKJQUWIKRX',
+'QGZRLVNCNMCAXFD',
+'IFGCTCBYIDWAKMT',
+'SOVGRZBSLOTNTJG',
+'MYMLDDQMIHZEW0Z'
+];
+
 const grid=document.getElementById("grid");
 const cells=[];
-rows.forEach(row=>[...row].forEach(ch=>{const cell=document.createElement("div");cell.className="cell";cell.textContent=ch;grid.appendChild(cell);cells.push(cell)}));
 
-let selecting=false,start=-1;
-let selected=new Set();
+rows.forEach(row=>{
+  [...row].forEach(ch=>{
+    const cell=document.createElement("div");
+    cell.className="cell";
+    cell.textContent=ch;
+    grid.appendChild(cell);
+    cells.push(cell);
+  });
+});
+
+let selecting=false;
+let start=-1;
 let currentLine=[];
+let selected=new Set();
 
 function paint(indices){
-  cells.forEach((c,i)=>c.style.background=selected.has(i)?"#d5d3ce":"#fff");
-  indices.forEach(i=>cells[i].style.background="#d5d3ce");
+  cells.forEach((cell,i)=>{
+    cell.style.background=selected.has(i)?"#d5d3ce":"#fff";
+  });
+  indices.forEach(i=>{
+    cells[i].style.background="#d5d3ce";
+  });
 }
 
 function getLine(end){
-  if(start<0)return [];
-  const sr=Math.floor(start/15),sc=start%15;
-  const er=Math.floor(end/15),ec=end%15;
-  const dr=er-sr,dc=ec-sc;
-  if(!(dr===0||dc===0||Math.abs(dr)===Math.abs(dc)))return [];
-  const steps=Math.max(Math.abs(dr),Math.abs(dc));
+  if(start<0) return [];
+
+  const sr=Math.floor(start/15);
+  const sc=start%15;
+  const er=Math.floor(end/15);
+  const ec=end%15;
+
+  const dr=er-sr;
+  const dc=ec-sc;
+
+  if(!(dr===0 || dc===0 || Math.abs(dr)===Math.abs(dc))) return [];
+
   const rs=dr===0?0:Math.sign(dr);
   const cs=dc===0?0:Math.sign(dc);
+  const steps=Math.max(Math.abs(dr),Math.abs(dc));
   const line=[];
-  for(let k=0;k<=steps;k++)line.push((sr+rs*k)*15+(sc+cs*k));
+
+  for(let k=0;k<=steps;k++){
+    line.push((sr+rs*k)*15+(sc+cs*k));
+  }
+
   return line;
 }
 
@@ -65,41 +108,70 @@ cells.forEach((cell,i)=>{
     e.preventDefault();
     selecting=true;
     start=i;
-    
-    paint([i]);
+    currentLine=[i];
+    paint(currentLine);
   });
+
   cell.addEventListener("pointermove",e=>{
-  e.preventDefault();
-  if(selecting){
+    if(!selecting) return;
+    e.preventDefault();
+
     currentLine=getLine(i);
-    if(currentLine.length)paint(currentLine);
-  }
+
+    if(currentLine.length){
+      paint(currentLine);
+    }
+  });
 });
 
 document.addEventListener("pointerup",()=>{
-  if(!selecting)return;
+  if(!selecting) return;
+
   if(currentLine.length){
     currentLine.forEach(i=>selected.add(i));
   }
+
   selecting=false;
+  start=-1;
   currentLine=[];
   paint([]);
 });
 
-function clean(v){return v.trim().toLowerCase().replace(/[^a-z]/g,"")}
+function clean(v){
+  return v.trim().toLowerCase().replace(/[^a-z]/g,"");
+}
 
 document.getElementById("submit").addEventListener("click",()=>{
   const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
-  const accepted=[["routine"],["falselead"],["alibi"],["innocent"]];
+
+  const accepted=[
+    ["routine"],
+    ["falselead"],
+    ["alibi"],
+    ["innocent"]
+  ];
+
   const result=document.getElementById("result");
+
   if(answers.every((v,i)=>accepted[i].includes(v))){
     result.className="success";
-    result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Bonus Evidence Unlocked</h3><p class="message">ROUTINE - FALSE LEAD - ALIBI - INNOCENT</p><p>Investigators checked Nora&#x27;s previous closing checklists.</p><p>The suspicious-looking remote instruction appears on her normal closing routine.</p><p>It was not added because of the murder.</p><p>Nora&#x27;s routine was normal and her alibi remains valid.</p><p>The clue pointing toward Nora was a false lead.</p><p>Now detectives must ask: who knew Nora&#x27;s routine well enough to make her look guilty?</p></div>`;
+    result.innerHTML=
+      '<h2>ACCESS GRANTED</h2>'+
+      '<div class="evidence">'+
+      '<h3>Bonus Evidence Unlocked</h3>'+
+      '<p class="message">ROUTINE - FALSE LEAD - ALIBI - INNOCENT</p>'+
+      '<p>Investigators checked Nora&#x27;s previous closing checklist. The suspicious-looking remote instruction appears on her normal closing routine.</p>'+
+      '</div>';
   }else{
     result.className="error";
-    result.innerHTML="<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>";
+    result.innerHTML=
+      '<h3>ACCESS DENIED</h3>'+
+      '<p>One or more answers is incorrect. Go back to the clues, check your answers, and try again.</p>';
   }
+
   result.style.display="block";
   result.scrollIntoView({behavior:"smooth",block:"nearest"});
 });
-</script></body></html>
+</script>
+</body>
+</html>
