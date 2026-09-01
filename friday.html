@@ -304,20 +304,66 @@ function getLine(start,end){
   return result;
 }
 
+function clearSelection(){
+  currentSelection.forEach(i=>{
+    if(!foundCells.has(i)){
+      grid.children[i].classList.remove('selected');
+    }
+  });
+
+  currentSelection=[];
+  startIndex=null;
+}
+
+function getLine(start,end){
+  const r1=Math.floor(start/15);
+  const c1=start%15;
+  const r2=Math.floor(end/15);
+  const c2=end%15;
+
+  const dr=Math.sign(r2-r1);
+  const dc=Math.sign(c2-c1);
+
+  if(r1!==r2 && c1!==c2 && Math.abs(r2-r1)!==Math.abs(c2-c1)){
+    return [];
+  }
+
+  const distance=Math.max(
+    Math.abs(r2-r1),
+    Math.abs(c2-c1)
+  );
+
+  const result=[];
+
+  for(let i=0;i<=distance;i++){
+    result.push((r1+dr*i)*15+(c1+dc*i));
+  }
+
+  return result;
+}
+
 function paint(indices){
   clearSelection();
+
   currentSelection=indices;
 
   indices.forEach(i=>{
-    grid.children[i].classList.add('selected');
+    if(!foundCells.has(i)){
+      grid.children[i].classList.add('selected');
+    }
   });
 }
 
 grid.querySelectorAll('.cell').forEach((cell,i)=>{
+
   cell.addEventListener('pointerdown',e=>{
     e.preventDefault();
+
     selecting=true;
     startIndex=i;
+
+    cell.setPointerCapture?.(e.pointerId);
+
     paint([i]);
   });
 
@@ -330,6 +376,7 @@ grid.querySelectorAll('.cell').forEach((cell,i)=>{
       paint(line);
     }
   });
+
 });
 
 document.addEventListener('pointerup',()=>{
@@ -337,7 +384,10 @@ document.addEventListener('pointerup',()=>{
 
   selecting=false;
 
-  if(!currentSelection.length) return;
+  if(!currentSelection.length){
+    clearSelection();
+    return;
+  }
 
   const word=currentSelection
     .map(i=>grid.children[i].textContent)
@@ -354,9 +404,16 @@ document.addEventListener('pointerup',()=>{
   ];
 
   if(valid.includes(word) || valid.includes(reversed)){
+
     currentSelection.forEach(i=>{
+      foundCells.add(i);
+      grid.children[i].classList.remove('selected');
       grid.children[i].classList.add('found');
     });
+
+    currentSelection=[];
+    startIndex=null;
+
   }else{
     clearSelection();
   }
