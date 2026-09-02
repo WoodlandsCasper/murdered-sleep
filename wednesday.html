@@ -273,143 +273,171 @@ Was the crime about a product... or about a philosophy of sleep?</div>
 <script id="fixed-word-search-script">
 const rows=["VISBYXBLLBBHVRE","ADYZWEBBALXOTSA","ZXMUBDZGPRQWJEE","GOSHAKTSJWEQBDZ","UDDEWBUOOZOKDEE","KBERKALLYPAPSPE","QVMOCMLQPSCWEBX","QWOFZIYEQUHLOUB","VSMEPJVXUCSITWS","GWRBDYKGIXHDGTP","HLYCEOQDTMYOEOX","FCPBVIOZOKNMXDM","IAWBONKHGETAPAD","SVCZMDIQJKGRKQP","ESSETJQAQKALAZR"];
 const validWords=["pillow","moved","before","demo"];
-const answers=[["pillow","pillows"],["moved"],["before"],["demo","demonstration"]];
+const answerOptions=[["pillow","pillows"],["moved"],["before"],["demo","demonstration"]];
 const grid=document.getElementById("grid");
-const status=document.getElementById("result");
 const cells=[];
+const foundCells=new Set();
+const foundWords=new Set();
+let tapStart=null;
+let pointerStart=null;
+let dragging=false;
+let temporary=[];
+
 rows.forEach((row,r)=>[...row].forEach((ch,c)=>{
   const cell=document.createElement("button");
   cell.type="button";
   cell.className="cell";
   cell.textContent=ch;
-  cell.dataset.index=r*15+c;
   cell.dataset.r=r;
   cell.dataset.c=c;
+  cell.dataset.index=cells.length;
+  cell.addEventListener("pointerdown",beginPointer);
   grid.appendChild(cell);
   cells.push(cell);
 }));
+
+grid.style.touchAction="none";
+
 function clean(value){return value.trim().toLowerCase().replace(/[^a-z]/g,"");}
-function getCellIndexFromPoint(x,y){
-  const element=document.elementFromPoint(x,y);
-  const cell=element ? element.closest(".cell") : null;
-  if(!cell || !grid.contains(cell)) return null;
-  return Number(cell.dataset.index);
+function cellFromTarget(target){return target && target.closest ? target.closest(".cell") : null;}
+function cellAt(r,c){
+  if(r<0||r>=15||c<0||c>=15)return null;
+  return cells[r*15+c];
 }
-function getLine(start,end){
-  const r1=Math.floor(start/15), c1=start%15;
-  const r2=Math.floor(end/15), c2=end%15;
-  const dr=r2-r1, dc=c2-c1;
-  if(dr!==0 && dc!==0 && Math.abs(dr)!==Math.abs(dc)) return [];
+function lineBetween(a,b){
+  const ar=+a.dataset.r, ac=+a.dataset.c;
+  const br=+b.dataset.r, bc=+b.dataset.c;
+  const dr=br-ar, dc=bc-ac;
+  if(dr!==0 && dc!==0 && Math.abs(dr)!==Math.abs(dc))return [];
   const steps=Math.max(Math.abs(dr),Math.abs(dc));
   const sr=Math.sign(dr), sc=Math.sign(dc);
-  const line=[];
-  for(let i=0;i<=steps;i++) line.push((r1+sr*i)*15+(c1+sc*i));
-  return line;
+  const out=[];
+  for(let i=0;i<=steps;i++)out.push(cellAt(ar+sr*i,ac+sc*i));
+  return out;
 }
-let selecting=false;
-let startIndex=null;
-let currentSelection=[];
-const foundCells=new Set();
-const foundWords=new Set();
 function clearTemporary(){
-  currentSelection.forEach(i=>{
-    const cell=cells[i];
-    if(cell && !foundCells.has(i)) cell.classList.remove("selected");
+  temporary.forEach(cell=>{
+    const i=+cell.dataset.index;
+    if(!foundCells.has(i))cell.classList.remove("selected");
   });
-  currentSelection=[];
+  temporary=[];
 }
-function paint(line){
+function showTemporary(line){
   clearTemporary();
-  currentSelection=line;
-  line.forEach(i=>{
-    const cell=cells[i];
-    if(cell && !foundCells.has(i)) cell.classList.add("selected");
+  temporary=line;
+  line.forEach(cell=>{
+    if(!foundCells.has(+cell.dataset.index))cell.classList.add("selected");
   });
 }
-function finishSelection(){
-  if(!selecting) return;
-  selecting=false;
-  if(!currentSelection.length){startIndex=null;return;}
-  const word=currentSelection.map(i=>cells[i].textContent).join("").toLowerCase();
-  const reverse=[...word].reverse().join("");
-  let matched=null;
-  if(validWords.includes(word)) matched=word;
-  else if(validWords.includes(reverse)) matched=reverse;
-  if(matched && !foundWords.has(matched)){
-    currentSelection.forEach(i=>{
-      foundCells.add(i);
-      const cell=cells[i];
-      if(cell){cell.classList.remove("selected");cell.classList.add("found");}
-    });
-    foundWords.add(matched);
-    const answerIndex=validWords.indexOf(matched);
-    const input=document.getElementById("a"+(answerIndex+1));
-    if(input) input.value=answers[answerIndex][0];
-    status.textContent="Word found: "+matched.toUpperCase()+" — "+foundWords.size+" of 4 found.";
-    currentSelection=[];
-  }else if(matched){
-    clearTemporary();
-    status.textContent=matched.toUpperCase()+" has already been found.";
-  }else{
-    clearTemporary();
-    status.textContent="That selection is not one of today's hidden words.";
-  }
-  startIndex=null;
+function statusMessage(text){
+  const el=document.getElementById("result");
+  if(el && !el.classList.contains("success"))el.textContent=text;
 }
-grid.addEventListener("pointerdown",event=>{
-  const cell=event.target.closest(".cell");
-  if(!cell || !grid.contains(cell)) return;
-  event.preventDefault();
-  selecting=true;
-  startIndex=Number(cell.dataset.index);
-  paint([startIndex]);
-  status.textContent="Keep dragging to select the word.";
-});
-document.addEventListener("pointermove",event=>{
-  if(!selecting || startIndex===null) return;
-  event.preventDefault();
-  const index=getCellIndexFromPoint(event.clientX,event.clientY);
-  if(index===null) return;
-  const line=getLine(startIndex,index);
-  if(line.length) paint(line);
-});
-document.addEventListener("pointerup",event=>{
-  if(!selecting) return;
-  event.preventDefault();
-  const index=getCellIndexFromPoint(event.clientX,event.clientY);
-  if(index!==null){
-    const line=getLine(startIndex,index);
-    if(line.length) paint(line);
+function finish(line){
+  clearTemporary();
+  if(!line.length)return;
+  const word=line.map(c=>c.textContent).join("").toLowerCase();
+  const reverse=[...word].reverse().join("");
+  let matched=validWords.includes(word)?word:(validWords.includes(reverse)?reverse:null);
+  if(!matched){
+    showTemporary(line);
+    statusMessage("That selection is not one of today's hidden words.");
+    setTimeout(clearTemporary,500);
+    return;
   }
-  finishSelection();
-});
-document.addEventListener("pointercancel",()=>{
-  if(selecting){
-    selecting=false;
-    clearTemporary();
-    startIndex=null;
-    status.textContent="";
+  if(foundWords.has(matched)){
+    statusMessage(matched.toUpperCase()+" has already been found.");
+    return;
   }
-});
+  line.forEach(cell=>{
+    const i=+cell.dataset.index;
+    foundCells.add(i);
+    cell.classList.remove("selected");
+    cell.classList.add("found");
+  });
+  foundWords.add(matched);
+  const answerIndex=validWords.indexOf(matched)+1;
+  const input=document.getElementById("a"+answerIndex);
+  if(input)input.value=answerOptions[answerIndex-1][0];
+  statusMessage("Word found: "+matched.toUpperCase()+" — "+foundWords.size+" of 4 found.");
+}
+function beginPointer(event){
+  if(event.button!==undefined && event.button!==0)return;
+  event.preventDefault();
+  const cell=cellFromTarget(event.target);
+  if(!cell)return;
+  pointerStart=cell;
+  dragging=false;
+  try{cell.setPointerCapture(event.pointerId);}catch(e){}
+  document.addEventListener("pointermove",movePointer,{passive:false});
+  document.addEventListener("pointerup",endPointer,{passive:false,once:true});
+  document.addEventListener("pointercancel",cancelPointer,{passive:false,once:true});
+}
+function movePointer(event){
+  if(!pointerStart)return;
+  event.preventDefault();
+  const cell=cellFromPoint(event.clientX,event.clientY);
+  if(!cell)return;
+  if(cell!==pointerStart)dragging=true;
+  if(dragging){
+    const line=lineBetween(pointerStart,cell);
+    if(line.length)showTemporary(line);
+  }
+}
+function endPointer(event){
+  if(!pointerStart)return;
+  event.preventDefault();
+  const start=pointerStart;
+  const end=cellFromPoint(event.clientX,event.clientY) || cellFromTarget(event.target);
+  document.removeEventListener("pointermove",movePointer);
+  document.removeEventListener("pointercancel",cancelPointer);
+  pointerStart=null;
+  if(dragging){
+    dragging=false;
+    const line=end ? lineBetween(start,end) : [];
+    finish(line);
+    return;
+  }
+  clearTemporary();
+  if(tapStart===null){
+    tapStart=start;
+    if(!foundCells.has(+start.dataset.index))start.classList.add("selected");
+    statusMessage("Now click the last letter of the word.");
+    return;
+  }
+  if(tapStart===start){
+    if(!foundCells.has(+start.dataset.index))start.classList.remove("selected");
+    tapStart=null;
+    statusMessage("");
+    return;
+  }
+  const line=lineBetween(tapStart,start);
+  tapStart=null;
+  finish(line);
+}
+function cancelPointer(){
+  document.removeEventListener("pointermove",movePointer);
+  pointerStart=null;
+  dragging=false;
+  clearTemporary();
+}
+function cellFromPoint(x,y){
+  const el=document.elementFromPoint(x,y);
+  return cellFromTarget(el);
+}
+
 document.getElementById("submit").addEventListener("click",()=>{
-  const entered=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
-  const correct=entered.every((value,i)=>answers[i].some(option=>clean(option)===value));
-  if(!correct){
-    status.className="error";
-    status.innerHTML='<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>';
-    status.style.display="block";
-    return;
+  const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
+  const result=document.getElementById("result");
+  if(answers.every((v,i)=>answerOptions[i].some(x=>clean(x)===v))){
+    result.className="success";
+    result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Bonus Evidence Unlocked</h3><p class="message">PILLOW MOVED BEFORE DEMO</p><p>Investigators reviewed the showroom motion sensors.</p><p>The pillow was moved before the Adjustable Base was activated.</p><p>The pillow was not part of a random mess.</p><p>It was positioned before the demonstration began.</p><p>Someone planned the sleep setup before the demonstration.</p></div>`;
+  }else{
+    result.className="error";
+    result.innerHTML=`<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>`;
   }
-  if(foundWords.size<4){
-    status.className="error";
-    status.innerHTML='<h3>ALMOST THERE</h3><p>You have the right answers, but all four hidden words must be found in the puzzle first.</p><p>Found: '+foundWords.size+' of 4.</p>';
-    status.style.display="block";
-    return;
-  }
-  status.className="success";
-  status.innerHTML='<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Bonus Evidence Unlocked</h3><p class="message">PILLOW MOVED BEFORE DEMO</p><p>Investigators reviewed the showroom motion sensors.</p><p>The pillow was moved before the Adjustable Base was activated.</p><p>The pillow was not part of a random mess.</p><p>It was positioned before the demonstration began.</p><p>Someone planned the sleep setup before the demonstration.</p></div>';
-  status.style.display="block";
-  status.scrollIntoView({behavior:"smooth",block:"nearest"});
+  result.style.display="block";
+  result.scrollIntoView({behavior:"smooth",block:"nearest"});
 });
 </script></body>
 </html>
