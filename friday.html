@@ -366,16 +366,16 @@ grid.querySelectorAll('.cell').forEach((cell,i)=>{
     paint([i]);
   });
 
-  cell.addEventListener('pointerenter',e=>{
-    if(!selecting) return;
+ cell.addEventListener('pointermove',e=>{
+  if(!selecting) return;
 
-    const line=getLine(startIndex,i);
+  e.preventDefault();
 
-    if(line.length){
-      paint(line);
-    }
-  });
+  const line=getLine(startIndex,i);
 
+  if(line.length){
+    paint(line);
+  }
 });
 
 document.addEventListener('pointerup',()=>{
