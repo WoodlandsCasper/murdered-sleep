@@ -268,7 +268,7 @@ rows.forEach(row=>{
 let selecting=false;
 let startIndex=null;
 let currentSelection=[];
-
+const foundCells=new Set();
 function clearSelection(){
   currentSelection.forEach(i=>{
     grid.children[i].classList.remove('selected');
