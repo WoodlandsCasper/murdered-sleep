@@ -1,175 +1,560 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Case of the Murdered Sleep — Thursday</title>
 <style>
-:root{--ink:#1e1e1e;--muted:#666;--paper:#fff;--soft:#f3f2ef}
-*{box-sizing:border-box} body{margin:0;padding:24px;background:#e9e7e2;color:var(--ink);font-family:Georgia,"Times New Roman",serif}
-.page{max-width:900px;margin:auto;background:#fff;border:1px solid #bbb;padding:34px}
-.kicker{text-align:center;letter-spacing:2px;font-size:13px;color:#666}h1{text-align:center;font-size:34px;margin:8px 0 4px}
-.subtitle{text-align:center;color:#666;margin-bottom:28px}.instructions{background:var(--soft);border-left:4px solid #333;padding:18px;line-height:1.55}
-h2{margin-top:28px;font-size:23px}.clue{margin:22px 0}.clue label{display:block;font-weight:bold;margin-bottom:8px}
-input{width:100%;padding:12px 13px;font:16px Arial,sans-serif;border:1px solid #999;border-radius:3px}
-input:focus{outline:2px solid #555;outline-offset:1px}.wordgrid{display:grid;grid-template-columns:repeat(15,1fr);gap:2px;max-width:630px;margin:20px auto;background:#d5d3ce;padding:7px}
-.cell{background:#fff;text-align:center;font:700 15px Arial,sans-serif;padding:7px 1px;user-select:none}
-button{display:block;margin:25px auto 0;padding:14px 28px;border:0;background:#222;color:#fff;font-size:17px;cursor:pointer}
-button:hover{background:#444}#result{display:none;margin-top:26px;padding:24px;border:2px solid #222;background:#fafafa;line-height:1.6}
-.error{color:#8b1e1e}.evidence{margin-top:18px;padding:18px;background:#eee}.message{font-family:Arial,sans-serif;font-size:18px;letter-spacing:.5px}
-.small{color:#666;font-size:14px}@media(max-width:600px){body{padding:8px}.page{padding:18px}h1{font-size:27px}.wordgrid{gap:1px;padding:4px}.cell{font-size:10px;padding:5px 0}}
-</style></head><body><main class="page">
-<div class="kicker">CASPER SLEEP POLICE</div><h1>The Case of the Murdered Sleep</h1>
-<div class="subtitle">Thursday Detective Challenge: The False Lead</div>
-<section class="instructions"><strong>Detective Notes</strong><p><strong>Case Update — Day 4</strong></p><p>The Sleep Police have gone back through everyone's alibis.</p><p>Here's what they've confirmed:</p><p>Olivia: Left at 11:47 p.m. Employee records confirm she exited at 11:49.</p><p>Carl: Claims he was home drinking coffee. His smart coffee maker activated at 12:05 a.m.</p><p>Polly: Left at 10:30 p.m. Her rideshare receipt confirms it.</p><p>Nora: Left after locking the store at 11:02 p.m. Security confirms she did not badge back in.</p><p>Dr. Nightmare: Computer activity confirms he was home.</p><p>Barry: Left at 9:45 p.m. Employee access confirms he exited.</p><p>So...</p><p>Everyone appears to have an alibi.</p><p>But then investigators noticed something strange.</p><p>Nora's closing checklist contains this note:</p><p><strong>"CHECK ALL REMOTES TWICE."</strong></p><p>Why would she specifically mention the remotes?</p><p>Did Nora know something was going to happen?</p><p>Or is someone trying to make her look guilty?</p></section>
-<section class="instructions"><strong>Detective Instructions</strong>
-<p>Solve the four clues below. The answers are not given to you.</p>
-<p>Once you solve each clue, find that answer hidden somewhere in the word search.</p>
-<p>Enter the four answers in the order of the clues. When all four are correct, today's classified evidence will unlock automatically.</p>
-<p class="small">Do not submit your answers to the Game Director. The puzzle will tell you when you have cracked the case.</p></section>
-<h2>Solve the Clues</h2><div class="clue"><label for="a1">Clue 1: What word describes something done regularly in the usual way?</label><input id="a1" autocomplete="off"></div>
-<div class="clue"><label for="a2">Clue 2: What term describes a clue or piece of information that sends investigators in the wrong direction?</label><input id="a2" autocomplete="off"></div>
-<div class="clue"><label for="a3">Clue 3: What word means a claim or evidence that someone was somewhere else when something happened?</label><input id="a3" autocomplete="off"></div>
-<div class="clue"><label for="a4">Clue 4: What word describes someone who did not commit the crime?</label><input id="a4" autocomplete="off"></div>
-<h2>Find Your Answers</h2><p>Find all four answers in the word search. They may appear horizontally, vertically, diagonally, forwards, or backwards.</p>
-<div class="wordgrid" id="grid"></div>
-<button type="button" id="submit">Unlock Evidence</button><div id="result" aria-live="polite"></div>
+:root{
+  --ink:#1e1e1e;
+  --muted:#666;
+  --paper:#fff;
+  --soft:#f3f2ef;
+  --selected:#d5d3ce;
+  --found:#b48a48;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  padding:24px;
+  background:#e9e7e2;
+  color:var(--ink);
+  font-family:Georgia,"Times New Roman",serif;
+}
+.page{
+  max-width:900px;
+  margin:auto;
+  background:var(--paper);
+  border:1px solid #bbb;
+  padding:34px;
+}
+.kicker{
+  text-align:center;
+  letter-spacing:2px;
+  font-size:13px;
+  color:var(--muted);
+}
+h1{
+  text-align:center;
+  font-size:34px;
+  margin:8px 0 4px;
+}
+.subtitle{
+  text-align:center;
+  color:var(--muted);
+  margin-bottom:28px;
+}
+.instructions{
+  background:var(--soft);
+  border-left:4px solid #333;
+  padding:18px;
+  line-height:1.55;
+}
+.case-clue{
+  margin:24px 0;
+  padding:22px;
+  border:2px solid #222;
+  background:#f8f8f8;
+  border-radius:8px;
+}
+.case-clue h2{margin-top:0}
+.clue-text{
+  white-space:pre-wrap;
+  line-height:1.65;
+}
+.clue{margin:22px 0}
+.clue label{
+  display:block;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+input{
+  width:100%;
+  padding:12px 13px;
+  font:16px Arial,sans-serif;
+  border:1px solid #999;
+  border-radius:3px;
+}
+input:focus{
+  outline:2px solid #555;
+  outline-offset:1px;
+}
+.wordgrid{
+  display:grid;
+  grid-template-columns:repeat(15,1fr);
+  gap:3px;
+  max-width:650px;
+  margin:20px auto;
+  background:#d5d3ce;
+  padding:7px;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.cell{
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  aspect-ratio:1;
+  min-width:0;
+  border:1px solid #bbb;
+  border-radius:3px;
+  font:700 17px Arial,sans-serif;
+  cursor:crosshair;
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:none;
+}
+.cell.selected{background:var(--selected)}
+.cell.found{background:var(--found);color:#fff}
+button{
+  display:block;
+  margin:25px auto 0;
+  padding:14px 28px;
+  border:0;
+  background:#222;
+  color:#fff;
+  font-size:17px;
+  cursor:pointer;
+}
+button:hover{background:#444}
+#result{
+  display:none;
+  margin-top:26px;
+  padding:24px;
+  border:2px solid #222;
+  background:#fafafa;
+  line-height:1.6;
+}
+.error{color:#8b1e1e}
+.evidence{
+  margin-top:18px;
+  padding:18px;
+  background:#eee;
+}
+.message{
+  font-family:Arial,sans-serif;
+  font-size:18px;
+  letter-spacing:.5px;
+  font-weight:bold;
+}
+.small{
+  color:#666;
+  font-size:14px;
+}
+.status{
+  text-align:center;
+  font:14px Arial,sans-serif;
+  color:#666;
+  min-height:20px;
+  margin-top:8px;
+}
+@media(max-width:600px){
+  body{padding:8px}
+  .page{padding:18px}
+  h1{font-size:27px}
+  .wordgrid{gap:2px;padding:5px}
+  .cell{font-size:11px}
+}
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="kicker">CASPER SLEEP POLICE</div>
+  <h1>The Case of the Murdered Sleep</h1>
+  <div class="subtitle">Thursday Detective Challenge: The False Lead</div>
+
+  <section class="instructions">
+    <strong>Detective Instructions</strong>
+    <p>Solve the four clues below. The answers are not given to you.</p>
+    <p>Once you solve each clue, find that answer hidden somewhere in the word search.</p>
+    <p>Enter the four answers in the order of the clues. Find all four hidden words, then submit your answers to unlock today's classified evidence.</p>
+    <p class="small">Words may run horizontally, vertically, diagonally, forwards, or backwards. Click and hold the first letter, drag across the word, and release. You can also click the first letter and then click the last letter.</p>
+  </section>
+
+  <section class="case-clue">
+    <h2>Thursday Case Update</h2>
+    <div class="clue-text">Case Update — Day 4
+
+The Sleep Police have gone back through everyone's alibis.
+
+Here's what they've confirmed:
+
+Olivia: Left at 11:47 p.m.
+Employee records confirm she exited at 11:49.
+
+Carl: Claims he was home drinking coffee.
+His smart coffee maker activated at 12:05 a.m.
+
+Polly: Left at 10:30 p.m.
+Her rideshare receipt confirms it.
+
+Nora: Left after locking the store at 11:02 p.m.
+Security confirms she did not badge back in.
+
+Dr. Nightmare: Computer activity confirms he was home.
+
+Barry: Left at 9:45 p.m.
+Employee access confirms he exited.
+
+So...
+
+Everyone appears to have an alibi.
+
+But then investigators noticed something strange.
+
+Nora's closing checklist contains this note:
+
+"CHECK ALL REMOTES TWICE."
+
+Why would she specifically mention the remotes?
+
+Did Nora know something was going to happen?
+
+Or is someone trying to make her look guilty?</div>
+  </section>
+
+  <h2>Solve the Clues</h2>
+  <div class="clue"><label for="a1">Clue 1: What do you call something you do the same way regularly?</label><input id="a1" autocomplete="off"></div>
+  <div class="clue"><label for="a2">Clue 2: What word means something that happened or was done in the past?</label><input id="a2" autocomplete="off"></div>
+  <div class="clue"><label for="a3">Clue 3: What word means ordinary, usual, or expected?</label><input id="a3" autocomplete="off"></div>
+  <div class="clue"><label for="a4">Clue 4: What word means something is correct or true?</label><input id="a4" autocomplete="off"></div>
+
+  <h2>Find Your Answers</h2>
+  <p>Find all four answers in the word search. Correctly found words remain highlighted so you can continue searching.</p>
+
+  <div class="wordgrid" id="grid" aria-label="Thursday word search"></div>
+  <div class="status" id="status"></div>
+
+  <button type="button" id="submit">Unlock Evidence</button>
+  <div id="result" aria-live="polite"></div>
+
 </main>
+
 <script>
-const rows=[
-'ROUTINEASLRCYCZ',
-'FALSELEADZUARJJ',
-'RLHEHALIBIGWXZV',
-'MBGGTINNOCENTBD',
-'ZZKRPVEWLEBCIHP',
-'LPAHSMUKMPOLVTQ',
-'YXVXGALPFUATBUQ',
-'KNQWPMIZKXQWTAW',
-'JLMPUTYZWGFKHMZ',
-'QCZBBUAZOKETWND',
-'EXSPPUKJQUWIKRX',
-'QGZRLVNCNMCAXFD',
-'IFGCTCBYIDWAKMT',
-'SOVGRZBSLOTNTJG',
-'MYMLDDQMIHZEW0Z'
+const rows = [
+  "XVAWCSBSLBVEZMP",
+  "WSDVKUAZTAVXLBX",
+  "XIWLXXKWDYISFLK",
+  "EWBUDILAVXPXAYC",
+  "WJTODDTMLGLVWQF",
+  "OUJICBCNVJPZMCW",
+  "RYOJBCSBRIHJPJN",
+  "SDZOZRLONYNZMUK",
+  "YHSKDLRWMOWPNAB",
+  "RQICCLGORNGUYTI",
+  "NPCMWIRMUUEVLHK",
+  "JGPLZTAFLTIBHDR",
+  "GJQDHLLSUCIFAZT",
+  "SOVGRZBSLOTNTJG",
+  "MMYLMDDQMIHZEWO"
 ];
 
-const grid=document.getElementById("grid");
-const cells=[];
+const accepted = [
+  ["routine", "routines"],
+  ["was"],
+  ["normal"],
+  ["valid"]
+];
 
-rows.forEach(row=>{
-  [...row].forEach(ch=>{
-    const cell=document.createElement("div");
-    cell.className="cell";
-    cell.textContent=ch;
-    grid.appendChild(cell);
-    cells.push(cell);
-  });
-});
+const grid = document.getElementById("grid");
+const status = document.getElementById("status");
+const result = document.getElementById("result");
+const cells = [];
 
-let selecting=false;
-let start=-1;
-let currentLine=[];
-let selected=new Set();
+const foundCells = new Set();
+const foundWords = new Set();
 
-function paint(indices){
-  cells.forEach((cell,i)=>{
-    cell.style.background=selected.has(i)?"#d5d3ce":"#fff";
-  });
-  indices.forEach(i=>{
-    cells[i].style.background="#d5d3ce";
-  });
+let tapStart = null;
+let pointerStart = null;
+let dragging = false;
+let temporary = [];
+
+function clean(value){
+  return value.trim().toLowerCase().replace(/[^a-z]/g,"");
 }
 
-function getLine(end){
-  if(start<0) return [];
+function cellFromTarget(target){
+  return target && target.closest ? target.closest(".cell") : null;
+}
 
-  const sr=Math.floor(start/15);
-  const sc=start%15;
-  const er=Math.floor(end/15);
-  const ec=end%15;
+function cellFromPoint(x,y){
+  const element = document.elementFromPoint(x,y);
+  return cellFromTarget(element);
+}
 
-  const dr=er-sr;
-  const dc=ec-sc;
+function cellAt(row,col){
+  if(row < 0 || row >= 15 || col < 0 || col >= 15) return null;
+  return cells[row * 15 + col];
+}
 
-  if(!(dr===0 || dc===0 || Math.abs(dr)===Math.abs(dc))) return [];
+function lineBetween(startCell,endCell){
+  const r1 = Number(startCell.dataset.r);
+  const c1 = Number(startCell.dataset.c);
+  const r2 = Number(endCell.dataset.r);
+  const c2 = Number(endCell.dataset.c);
 
-  const rs=dr===0?0:Math.sign(dr);
-  const cs=dc===0?0:Math.sign(dc);
-  const steps=Math.max(Math.abs(dr),Math.abs(dc));
-  const line=[];
+  const dr = r2 - r1;
+  const dc = c2 - c1;
 
-  for(let k=0;k<=steps;k++){
-    line.push((sr+rs*k)*15+(sc+cs*k));
+  if(dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)){
+    return [];
+  }
+
+  const steps = Math.max(Math.abs(dr),Math.abs(dc));
+  const sr = Math.sign(dr);
+  const sc = Math.sign(dc);
+  const line = [];
+
+  for(let i = 0; i <= steps; i++){
+    line.push(cellAt(r1 + sr*i,c1 + sc*i));
   }
 
   return line;
 }
 
-cells.forEach((cell,i)=>{
-  cell.addEventListener("pointerdown",e=>{
-    e.preventDefault();
-    selecting=true;
-    start=i;
-    currentLine=[i];
-    paint(currentLine);
-  });
-
-  cell.addEventListener("pointermove",e=>{
-    if(!selecting) return;
-    e.preventDefault();
-
-    currentLine=getLine(i);
-
-    if(currentLine.length){
-      paint(currentLine);
+function clearTemporary(){
+  temporary.forEach(cell=>{
+    const index = Number(cell.dataset.index);
+    if(!foundCells.has(index)){
+      cell.classList.remove("selected");
     }
   });
-});
-
-document.addEventListener("pointerup",()=>{
-  if(!selecting) return;
-
-  if(currentLine.length){
-    currentLine.forEach(i=>selected.add(i));
-  }
-
-  selecting=false;
-  start=-1;
-  currentLine=[];
-  paint([]);
-});
-
-function clean(v){
-  return v.trim().toLowerCase().replace(/[^a-z]/g,"");
+  temporary = [];
 }
 
-document.getElementById("submit").addEventListener("click",()=>{
-  const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
+function showTemporary(line){
+  clearTemporary();
+  temporary = line;
+  line.forEach(cell=>{
+    if(!foundCells.has(Number(cell.dataset.index))){
+      cell.classList.add("selected");
+    }
+  });
+}
 
-  const accepted=[
-    ["routine"],
-    ["falselead"],
-    ["alibi"],
-    ["innocent"]
-  ];
+function setStatus(message){
+  status.textContent = message;
+}
 
-  const result=document.getElementById("result");
+function finish(line){
+  clearTemporary();
 
-  if(answers.every((v,i)=>accepted[i].includes(v))){
-    result.className="success";
-    result.innerHTML=
-      '<h2>ACCESS GRANTED</h2>'+
-      '<div class="evidence">'+
-      '<h3>Bonus Evidence Unlocked</h3>'+
-      '<p class="message">ROUTINE - FALSE LEAD - ALIBI - INNOCENT</p>'+
-      '<p>Investigators checked Nora&#x27;s previous closing checklist. The suspicious-looking remote instruction appears on her normal closing routine.</p>'+
-      '</div>';
-  }else{
-    result.className="error";
-    result.innerHTML=
-      '<h3>ACCESS DENIED</h3>'+
-      '<p>One or more answers is incorrect. Go back to the clues, check your answers, and try again.</p>';
+  if(!line.length) return;
+
+  const word = line.map(cell=>cell.textContent).join("").toLowerCase();
+  const reverse = [...word].reverse().join("");
+
+  let matched = null;
+
+  for(const options of accepted){
+    for(const answer of options){
+      const normalized = clean(answer);
+      if(normalized === word || normalized === reverse){
+        matched = normalized;
+        break;
+      }
+    }
+    if(matched) break;
   }
 
-  result.style.display="block";
+  if(!matched){
+    showTemporary(line);
+    setStatus("That selection is not one of today's hidden words.");
+    setTimeout(clearTemporary,500);
+    return;
+  }
+
+  if(foundWords.has(matched)){
+    setStatus(matched.toUpperCase() + " has already been found.");
+    return;
+  }
+
+  line.forEach(cell=>{
+    const index = Number(cell.dataset.index);
+    foundCells.add(index);
+    cell.classList.remove("selected");
+    cell.classList.add("found");
+  });
+
+  foundWords.add(matched);
+
+  const answerIndex = accepted.findIndex(options =>
+    options.some(option => clean(option) === matched)
+  ) + 1;
+
+  const input = document.getElementById("a" + answerIndex);
+  if(input){
+    input.value = matched;
+  }
+
+  setStatus(
+    "Word found: " + matched.toUpperCase() +
+    " — " + foundWords.size + " of 4 found."
+  );
+}
+
+function beginPointer(event){
+  if(event.button !== undefined && event.button !== 0) return;
+
+  const cell = cellFromTarget(event.target);
+  if(!cell) return;
+
+  event.preventDefault();
+
+  pointerStart = cell;
+  dragging = false;
+
+  document.addEventListener("pointermove",movePointer,{passive:false});
+  document.addEventListener("pointerup",endPointer,{passive:false,once:true});
+  document.addEventListener("pointercancel",cancelPointer,{passive:false,once:true});
+}
+
+function movePointer(event){
+  if(!pointerStart) return;
+
+  event.preventDefault();
+
+  const cell = cellFromPoint(event.clientX,event.clientY);
+  if(!cell) return;
+
+  if(cell !== pointerStart){
+    dragging = true;
+  }
+
+  if(dragging){
+    const line = lineBetween(pointerStart,cell);
+    if(line.length){
+      showTemporary(line);
+    }
+  }
+}
+
+function endPointer(event){
+  if(!pointerStart) return;
+
+  event.preventDefault();
+
+  const start = pointerStart;
+  const end =
+    cellFromPoint(event.clientX,event.clientY) ||
+    cellFromTarget(event.target);
+
+  document.removeEventListener("pointermove",movePointer);
+  document.removeEventListener("pointercancel",cancelPointer);
+
+  pointerStart = null;
+
+  if(dragging){
+    dragging = false;
+    const line = end ? lineBetween(start,end) : [];
+    finish(line);
+    return;
+  }
+
+  clearTemporary();
+
+  if(tapStart === null){
+    tapStart = start;
+
+    if(!foundCells.has(Number(start.dataset.index))){
+      start.classList.add("selected");
+    }
+
+    setStatus("Now click the last letter of the word.");
+    return;
+  }
+
+  if(tapStart === start){
+    if(!foundCells.has(Number(start.dataset.index))){
+      start.classList.remove("selected");
+    }
+    tapStart = null;
+    setStatus("");
+    return;
+  }
+
+  const line = lineBetween(tapStart,start);
+  tapStart = null;
+  finish(line);
+}
+
+function cancelPointer(){
+  document.removeEventListener("pointermove",movePointer);
+  pointerStart = null;
+  dragging = false;
+  tapStart = null;
+  clearTemporary();
+  setStatus("");
+}
+
+rows.forEach((row,r)=>{
+  [...row].forEach((letter,c)=>{
+    const cell = document.createElement("div");
+    cell.className = "cell";
+    cell.textContent = letter;
+    cell.dataset.r = r;
+    cell.dataset.c = c;
+    cell.dataset.index = cells.length;
+    grid.appendChild(cell);
+    cells.push(cell);
+  });
+});
+
+grid.style.touchAction = "none";
+
+cells.forEach(cell=>{
+  cell.addEventListener("pointerdown",beginPointer);
+});
+
+document.getElementById("submit").addEventListener("click",()=>{
+  const answers = [1,2,3,4].map(i =>
+    clean(document.getElementById("a"+i).value)
+  );
+
+  const answersCorrect = answers.every((answer,index)=>
+    accepted[index].some(option => clean(option) === answer)
+  );
+
+  const wordsCorrect = foundWords.size === 4;
+
+  if(answersCorrect && wordsCorrect){
+    result.className = "success";
+    result.innerHTML = `
+      <h2>ACCESS GRANTED</h2>
+      <div class="evidence">
+        <h3>Bonus Evidence Unlocked</h3>
+        <p class="message">ROUTINE WAS NORMAL VALID</p>
+        <p>Investigators checked Nora's previous closing checklists.</p>
+        <p>The phrase "CHECK ALL REMOTES TWICE" appears on her checklists every night.</p>
+        <p>It was not added because of the murder.</p>
+        <p>It was simply part of her normal routine.</p>
+        <p>Nora's alibi holds.</p>
+        <p>The clue pointing toward Nora was a false lead.</p>
+        <p>But now detectives have a much bigger question: who knew Nora's routine well enough to make her look guilty?</p>
+      </div>
+    `;
+  }else{
+    result.className = "error";
+    let message = "<h3>ACCESS DENIED</h3>";
+
+    if(!answersCorrect){
+      message += "<p>One or more answers is incorrect.</p>";
+    }
+
+    if(!wordsCorrect){
+      message +=
+        "<p>You still need to find all four hidden words. Words found: " +
+        foundWords.size + " of 4.</p>";
+    }
+
+    result.innerHTML = message;
+  }
+
+  result.style.display = "block";
   result.scrollIntoView({behavior:"smooth",block:"nearest"});
 });
 </script>
