@@ -85,9 +85,25 @@ cells.forEach((cell,i)=>{
   });
 });
 
-document.addEventListener("pointerup",()=>{
+document.addEventListener("pointerup",e=>{
   if(!selecting)return;
-  if(currentLine.length)currentLine.forEach(i=>selected.add(i));
+
+  if(currentLine.length){
+    const word=currentLine.map(i=>cells[i].textContent).join("");
+    const reverse=[...word].reverse().join("");
+
+    const valid=accepted.some(options=>
+      options.some(answer=>
+        answer.toUpperCase()===word ||
+        answer.toUpperCase()===reverse
+      )
+    );
+
+    if(valid){
+      currentLine.forEach(i=>selected.add(i));
+    }
+  }
+
   selecting=false;
   currentLine=[];
   paint([]);
