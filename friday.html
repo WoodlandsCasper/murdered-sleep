@@ -4,167 +4,244 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Case of the Murdered Sleep — Friday</title>
-<style>
 
+<style>
 :root{
-  --ink:#1b1b1b;
-  --muted:#6f6b64;
-  --paper:#fffdf8;
-  --cream:#f4f0e7;
-  --line:#d8d0c4;
-  --accent:#7a1f2b;
-  --accent2:#b48a48;
-  --green:#2d5b4a;
-  --shadow:0 16px 45px rgba(25,20,15,.12);
+  --ink:#1e1e1e;
+  --muted:#666;
+  --paper:#fff;
+  --soft:#f3f2ef;
+  --selected:#d5d3ce;
+  --found:#b48a48;
 }
+
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+
 body{
   margin:0;
-  background:
-    radial-gradient(circle at 15% 10%, rgba(180,138,72,.10), transparent 28%),
-    radial-gradient(circle at 85% 20%, rgba(122,31,43,.08), transparent 30%),
-    var(--cream);
+  padding:24px;
+  background:#e9e7e2;
   color:var(--ink);
   font-family:Georgia,"Times New Roman",serif;
 }
-a{color:inherit}
-.site-shell{max-width:1050px;margin:0 auto;padding:24px 18px 60px}
-.topbar{
-  display:flex;justify-content:space-between;align-items:center;gap:12px;
-  padding:10px 0 18px;font-family:Arial,sans-serif;font-size:12px;
-  letter-spacing:.12em;text-transform:uppercase;color:var(--muted)
+
+.page{
+  max-width:900px;
+  margin:auto;
+  background:var(--paper);
+  border:1px solid #bbb;
+  padding:34px;
 }
-.brand{font-weight:800;color:var(--accent)}
-.nav a{text-decoration:none;margin-left:14px}
-.hero{
-  position:relative;overflow:hidden;border:1px solid var(--line);
-  background:var(--paper);box-shadow:var(--shadow);border-radius:18px;
-  padding:42px 42px 34px;margin-bottom:22px;
+
+.kicker{
+  text-align:center;
+  letter-spacing:2px;
+  font-size:13px;
+  color:var(--muted);
 }
-.hero:after{
-  content:"";position:absolute;width:240px;height:240px;border:1px solid rgba(122,31,43,.16);
-  border-radius:50%;right:-90px;top:-90px;
+
+h1{
+  text-align:center;
+  font-size:34px;
+  margin:8px 0 4px;
 }
-.eyebrow{font:800 12px Arial,sans-serif;letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
-h1{font-size:clamp(38px,6vw,68px);line-height:.95;margin:10px 0 14px;letter-spacing:-.035em}
-.hero p{max-width:760px;font-size:18px;line-height:1.65;margin:0;color:#4d4942}
-.case-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
-.pill{
-  border:1px solid var(--line);border-radius:999px;padding:8px 12px;
-  font:700 11px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;
+
+.subtitle{
+  text-align:center;
+  color:var(--muted);
+  margin-bottom:28px;
+}
+
+.instructions{
+  background:var(--soft);
+  border-left:4px solid #333;
+  padding:18px;
+  line-height:1.55;
+}
+
+.case-clue{
+  margin:24px 0;
+  padding:22px;
+  border:2px solid #222;
+  background:#f8f8f8;
+  border-radius:8px;
+}
+
+.case-clue h2{margin-top:0}
+
+.clue-text{
+  white-space:pre-wrap;
+  font-family:Arial,sans-serif;
+  line-height:1.65;
+}
+
+.game-divider{
+  margin:28px 0;
+  padding:18px;
+  border-top:2px solid #222;
+  border-bottom:2px solid #222;
+}
+
+.game-divider h2{margin-top:0}
+
+.clue{margin:22px 0}
+
+.clue label{
+  display:block;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+input{
+  width:100%;
+  padding:12px 13px;
+  font:16px Arial,sans-serif;
+  border:1px solid #999;
+  border-radius:3px;
+}
+
+input:focus{
+  outline:2px solid #555;
+  outline-offset:1px;
+}
+
+.wordgrid{
+  display:grid;
+  grid-template-columns:repeat(15,1fr);
+  gap:2px;
+  max-width:630px;
+  margin:20px auto;
+  background:#d5d3ce;
+  padding:7px;
+  touch-action:none;
+  user-select:none;
+}
+
+.cell{
   background:#fff;
-}
-.section{
-  border:1px solid var(--line);background:var(--paper);border-radius:16px;
-  box-shadow:0 8px 25px rgba(25,20,15,.07);padding:28px;margin-top:20px
-}
-.section h2{margin:0 0 14px;font-size:28px}
-.clue-card{
-  white-space:pre-wrap;font-size:18px;line-height:1.72;
-  background:#fff;border-left:5px solid var(--accent);padding:22px 24px;
-  border-radius:10px;
-}
-.game-intro{
-  display:flex;justify-content:space-between;align-items:flex-end;gap:20px;
-  margin-bottom:14px
-}
-.game-intro p{margin:0;color:var(--muted);line-height:1.55}
-.badge{
-  flex:none;background:var(--accent);color:white;padding:8px 12px;border-radius:6px;
-  font:800 11px Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase
-}
-.back-link{
-  display:inline-flex;align-items:center;gap:7px;text-decoration:none;
-  font:700 12px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--accent);margin-top:16px
-}
-.footer{text-align:center;color:var(--muted);font:12px Arial,sans-serif;padding:30px 0}
-.instructions-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.info-card{border:1px solid var(--line);background:#fff;padding:20px;border-radius:12px}
-.info-card h3{margin:0 0 8px;font-size:20px}
-.info-card p,.info-card li{line-height:1.6;color:#4d4942}
-.timeline{display:grid;gap:10px}
-.timeline-row{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:14px;border:1px solid var(--line);border-radius:10px;background:#fff}
-.timeline-row strong{color:var(--accent);font-family:Arial,sans-serif;letter-spacing:.08em}
-.warning{border-left:5px solid var(--accent2);background:#fbf6e9;padding:16px 18px;border-radius:8px;line-height:1.55}
-.start-button{
-  display:inline-block;margin-top:22px;background:var(--accent);color:#fff;text-decoration:none;
-  padding:13px 18px;border-radius:7px;font:800 12px Arial,sans-serif;
-  letter-spacing:.1em;text-transform:uppercase
-}
-@media(max-width:720px){
- .hero{padding:30px 24px}.section{padding:21px}
- .instructions-grid{grid-template-columns:1fr}
- .timeline-row{grid-template-columns:1fr;gap:5px}
- .topbar{align-items:flex-start;flex-direction:column}
- .nav a{margin:0 12px 0 0}
+  text-align:center;
+  font:700 15px Arial,sans-serif;
+  padding:7px 1px;
+  user-select:none;
+  cursor:crosshair;
+  touch-action:none;
+  -webkit-user-select:none;
 }
 
+.cell.selected{
+  background:var(--selected);
+}
 
-:root{--ink:#1e1e1e;--muted:#666;--paper:#fff;--soft:#f3f2ef}
-*{box-sizing:border-box} body{margin:0;padding:24px;background:#e9e7e2;color:var(--ink);font-family:Georgia,"Times New Roman",serif}
-.page{max-width:900px;margin:auto;background:#fff;border:1px solid #bbb;padding:34px}
-.kicker{text-align:center;letter-spacing:2px;font-size:13px;color:#666}h1{text-align:center;font-size:34px;margin:8px 0 4px}
-.subtitle{text-align:center;color:#666;margin-bottom:28px}.instructions{background:var(--soft);border-left:4px solid #333;padding:18px;line-height:1.55}
-h2{margin-top:28px;font-size:23px}.clue{margin:22px 0}.clue label{display:block;font-weight:bold;margin-bottom:8px}
-input{width:100%;padding:12px 13px;font:16px Arial,sans-serif;border:1px solid #999;border-radius:3px}
-input:focus{outline:2px solid #555;outline-offset:1px}.wordgrid{display:grid;grid-template-columns:repeat(15,1fr);gap:2px;max-width:630px;margin:20px auto;background:#d5d3ce;padding:7px}
-.cell{background:#fff;text-align:center;font:700 15px Arial,sans-serif;padding:7px 1px;user-select:none}
-  .cell.selected{background:#d5d3ce}
-.cell.found{background:#b48a48;color:#fff}
-button{display:block;margin:25px auto 0;padding:14px 28px;border:0;background:#222;color:#fff;font-size:17px;cursor:pointer}
-button:hover{background:#444}#result{display:none;margin-top:26px;padding:24px;border:2px solid #222;background:#fafafa;line-height:1.6}
-.error{color:#8b1e1e}.evidence{margin-top:18px;padding:18px;background:#eee}.message{font-family:Arial,sans-serif;font-size:18px;letter-spacing:.5px}
-.small{color:#666;font-size:14px}@media(max-width:600px){body{padding:8px}.page{padding:18px}h1{font-size:27px}.wordgrid{gap:1px;padding:4px}.cell{font-size:10px;padding:5px 0}}
+.cell.found{
+  background:var(--found);
+  color:#fff;
+}
 
+button{
+  display:block;
+  margin:25px auto 0;
+  padding:14px 28px;
+  border:0;
+  background:#222;
+  color:#fff;
+  font-size:17px;
+  cursor:pointer;
+}
+
+button:hover{background:#444}
+
+#result{
+  display:none;
+  margin-top:26px;
+  padding:24px;
+  border:2px solid #222;
+  background:#fafafa;
+  line-height:1.6;
+}
+
+.error{color:#8b1e1e}
+
+.success{color:#1e1e1e}
+
+.evidence{
+  margin-top:18px;
+  padding:18px;
+  background:#eee;
+}
+
+.message{
+  font-family:Arial,sans-serif;
+  font-size:18px;
+  letter-spacing:.5px;
+  font-weight:bold;
+}
+
+.small{
+  color:#666;
+  font-size:14px;
+}
+
+.status{
+  text-align:center;
+  font:14px Arial,sans-serif;
+  color:#666;
+  min-height:20px;
+}
+
+@media(max-width:600px){
+  body{padding:8px}
+  .page{padding:18px}
+  h1{font-size:27px}
+  .wordgrid{gap:1px;padding:4px}
+  .cell{font-size:10px;padding:5px 0}
+}
 </style>
 </head>
+
 <body>
-<div class="site-shell">
-  <div class="topbar">
-    <div class="brand">Casper Sleep Police</div>
-    <div class="nav"><a href="instructions.html">How to Play</a><a href="thursday.html">← Thursday</a></div>
-  </div>
+<main class="page">
 
-  <header class="hero">
-    <div class="eyebrow">CASE FILE 05 • FRIDAY</div>
-    <h1>The Case of<br>the Murdered Sleep</h1>
-    <p>The Final Evidence. Read today’s evidence carefully, then solve the detective challenge below. Your answers unlock classified evidence automatically.</p>
-    <div class="case-meta">
-      <span class="pill">Daily Investigation</span>
-      <span class="pill">Interactive Puzzle</span>
-      <span class="pill">Evidence Unlock</span>
-    </div>
-    
-  </header>
+  <div class="kicker">CASPER SLEEP POLICE</div>
+  <h1>The Case of the Murdered Sleep</h1>
+  <div class="subtitle">Friday Detective Challenge: The Sleep Specialist</div>
 
-  <section class="section">
-    <div class="game-intro">
-      <div>
-        <div class="eyebrow">CASE FILE 05</div>
-        <h2>The Final Evidence</h2>
-      </div>
-      <div class="badge">Read the Clue</div>
-    </div>
-    <div class="clue-card">Case Update — Final Clue
+  <section class="instructions">
+    <strong>Detective Instructions</strong>
+
+    <p>Solve the four clues below. The answers are not given to you.</p>
+
+    <p>Once you solve each clue, find that answer hidden somewhere in the word search.</p>
+
+    <p>Enter the four answers in the order of the clues. Find all four hidden words, then submit your answers to unlock today's classified evidence.</p>
+
+    <p class="small">Words may run horizontally, vertically, diagonally, forwards, or backwards. Hold your mouse button down and drag across a word. On a phone or tablet, touch and drag across the letters.</p>
+
+    <section class="case-clue">
+      <h2>Friday — The Final Evidence</h2>
+
+      <div class="clue-text">Case Update — Final Clue
 
 The Sleep Police have reconstructed the overnight demonstration.
 
 The suspect moved the bed through the following sequence:
 
 FLAT
+
 HEAD ELEVATED
+
 ZERO GRAVITY
+
 ANTI-SNORE
+
 CUSTOM POSITION
+
 SPLIT POSITION
 
-This wasn’t random.
+This wasn't random.
 
-It wasn’t vandalism.
+It wasn't vandalism.
 
-It wasn’t someone playing with the remote.
+It wasn't someone playing with the remote.
 
 It was a demonstration.
 
@@ -176,282 +253,395 @@ A handwritten card.
 
 It read:
 
-“STOP SELLING A BED.
-START SELLING THE WAY SOMEONE SLEEPS.”
+"STOP SELLING A BED.
+START SELLING THE WAY SOMEONE SLEEPS."
 
 On the back:
 
-“POSITION.
+"POSITION.
 SUPPORT.
 COMFORT.
-SLEEP.”
+SLEEP."
 
-The culprit wasn’t trying to destroy Casper.
+The culprit wasn't trying to destroy Casper.
 
 They were trying to prove something.
 
 But who?</div>
-    <a class="back-link" href="#detective-game">↓ Continue to today’s detective game</a>
+    </section>
+
+    <section class="game-divider">
+      <h2>Now Solve the Bonus Detective Game</h2>
+      <p>The clue above is today's investigation. Solve the four clues, find all four hidden words, and unlock the classified evidence.</p>
+    </section>
   </section>
-<section class="section">
-  <div class="clue-card">
-    <strong>Detective Notes</strong>
 
-    <p>The final overnight evidence has been reconstructed.</p>
+  <h2>Solve the Clues</h2>
 
-    <p>The bed was moved through a deliberate sequence of positions using the adjustable base remote.</p>
-
-    <p>Investigators now believe the person responsible understood how the sleep system worked and knew exactly what each position was designed to do.</p>
-
-    <p>The evidence does not point to an attempt to damage the store. Instead, it suggests someone was demonstrating a complete approach to sleep: position, support, comfort, and sleep.</p>
-
-    <p>The question is no longer simply who had access to the store.</p>
-
-    <p><strong>Investigators must determine who had the knowledge, motivation, and opportunity to turn the incident into a demonstration.</strong></p>
-
-    <p>Review everything you have learned throughout the week. Today's challenge may finally reveal what the culprit was trying to prove.</p>
+  <div class="clue">
+    <label for="a1">Clue 1: What word means making something fit a person's individual needs?</label>
+    <input id="a1" autocomplete="off">
   </div>
-  <section class="section" id="detective-game">
-    <div class="game-intro">
-      <div>
-        <div class="eyebrow">Interactive Challenge</div>
-        <h2>The Sleep Specialist</h2>
-        <p>Solve the four clues, find the answers in the word search, and unlock today’s classified evidence.</p>
-      </div>
-      <div class="badge">Solve the Case</div>
-    </div>
-    <main class="page">
 
+  <div class="clue">
+    <label for="a2">Clue 2: What word describes a bed configuration where each side can be adjusted independently?</label>
+    <input id="a2" autocomplete="off">
+  </div>
 
-<section class="instructions"><strong>Detective Instructions</strong>
-<p>Solve the four clues below. The answers are not given to you.</p>
-<p>Once you solve each clue, find that answer hidden somewhere in the word search.</p>
-<p>Enter the four answers in the order of the clues. When all four are correct, today's classified evidence will unlock automatically.</p>
-<p class="small">Do not submit your answers to the Game Director. The puzzle will tell you when you have cracked the case.</p></section>
-<h2>Solve the Clues</h2><div class="clue"><label for="a1">Clue 1: What word means making something fit a person&#x27;s individual needs?</label><input id="a1" autocomplete="off"></div>
-<div class="clue"><label for="a2">Clue 2: What word describes a bed configuration where each side can be adjusted independently?</label><input id="a2" autocomplete="off"></div>
-<div class="clue"><label for="a3">Clue 3: What sleep position raises the head and legs and can create a feeling of weightlessness?</label><input id="a3" autocomplete="off"></div>
-<div class="clue"><label for="a4">Clue 4: What product category is Barry known for demonstrating?</label><input id="a4" autocomplete="off"></div>
-<h2>Find Your Answers</h2><p>Find all four answers in the word search. They may appear horizontally, vertically, diagonally, forwards, or backwards.</p>
-<div class="wordgrid" id="grid"></div>
-<button type="button" id="submit">Unlock Evidence</button><div id="result" aria-live="polite"></div>
+  <div class="clue">
+    <label for="a3">Clue 3: What sleep position raises the head and legs and can create a feeling of weightlessness?</label>
+    <input id="a3" autocomplete="off">
+  </div>
+
+  <div class="clue">
+    <label for="a4">Clue 4: What product category is Barry known for demonstrating?</label>
+    <input id="a4" autocomplete="off">
+  </div>
+
+  <h2>Find Your Answers</h2>
+
+  <p>Find all four answers in the word search. A correct word will remain highlighted so you can continue searching for the others.</p>
+
+  <div class="wordgrid" id="grid" aria-label="Friday word search"></div>
+
+  <div class="status" id="status"></div>
+
+  <button type="button" id="submit">Unlock Evidence</button>
+
+  <div id="result" aria-live="polite"></div>
+
 </main>
+
 <script>
-const rows=[
-'PERSONALIZATION',
-'ESABELBATSUJDAU',
-'DAXIHHEXDVXRCSN',
-'BAZCGHQTARGWUWR',
-'NHEOSIZAYZFWNKI',
-'EGRYKDCMDLLTIZB',
-'XOORDMCRJUTLSGW',
-'CBGVHYJCHDMIOUL',
-'FLRLGVIWVUCTUFR',
-'XHAFOMIUWRHVKYY',
-'BHVBSZKMICGSWKG',
-'UPIMUPOEIEHXRRI',
-'XSTNSMLLHEQPCYB',
-'DEYUFZVINTCMMTO',
-'QIRAVXDVTRYIYUK'
+
+const rows = [
+  "PERSONALIZATION",
+  "ADJUSTABLEBASEK",
+  "EMUBCRDLSBQGBCZ",
+  "NNCHCRNBSDHUUSE",
+  "SBSSMBHBREJNERR",
+  "DPSJRVFDSSUGLDO",
+  "RWLCSBTGPVRNYKG",
+  "OSOILJHZFWYHCSR",
+  "JQPKTXOJTCDQNFA",
+  "YKEPNBVCYRSZKKV",
+  "WLTPSZOCCIPWVCI",
+  "BXWJUSVOJWMVLAT",
+  "OLFTDPBGYJEXHMY",
+  "MPCFOMRIENRIWNL",
+  "VMHECFEHVHAPSFI"
 ];
 
-const grid=document.getElementById('grid');
-rows.forEach(row=>{
-  [...row].forEach(ch=>{
-    const cell=document.createElement('div');
-    cell.className='cell';
-    cell.textContent=ch;
+const validWords = [
+  "personalization",
+  "split",
+  "zerogravity",
+  "adjustablebase"
+];
+
+const grid = document.getElementById("grid");
+const status = document.getElementById("status");
+const result = document.getElementById("result");
+
+let selecting = false;
+let startIndex = null;
+let currentSelection = [];
+const foundCells = new Set();
+const foundWords = new Set();
+
+function clean(value){
+  return value.trim().toLowerCase().replace(/[^a-z]/g,"");
+}
+
+function getCellIndexFromPoint(x,y){
+  const element = document.elementFromPoint(x,y);
+  const cell = element ? element.closest(".cell") : null;
+
+  if(!cell || !grid.contains(cell)){
+    return null;
+  }
+
+  return Number(cell.dataset.index);
+}
+
+function getLine(start,end){
+  const r1 = Math.floor(start / 15);
+  const c1 = start % 15;
+
+  const r2 = Math.floor(end / 15);
+  const c2 = end % 15;
+
+  const rowDifference = Math.abs(r2-r1);
+  const colDifference = Math.abs(c2-c1);
+
+  if(
+    r1 !== r2 &&
+    c1 !== c2 &&
+    rowDifference !== colDifference
+  ){
+    return [];
+  }
+
+  const dr = Math.sign(r2-r1);
+  const dc = Math.sign(c2-c1);
+  const distance = Math.max(rowDifference,colDifference);
+
+  const line = [];
+
+  for(let step=0; step<=distance; step++){
+    const r = r1 + dr*step;
+    const c = c1 + dc*step;
+    line.push(r*15+c);
+  }
+
+  return line;
+}
+
+function clearTemporarySelection(){
+  currentSelection.forEach(index=>{
+    const cell = grid.children[index];
+
+    if(cell && !foundCells.has(index)){
+      cell.classList.remove("selected");
+    }
+  });
+
+  currentSelection = [];
+}
+
+function paintSelection(line){
+  clearTemporarySelection();
+
+  currentSelection = line;
+
+  line.forEach(index=>{
+    const cell = grid.children[index];
+
+    if(cell && !foundCells.has(index)){
+      cell.classList.add("selected");
+    }
+  });
+}
+
+function finishSelection(){
+  if(!selecting){
+    return;
+  }
+
+  selecting = false;
+
+  if(!currentSelection.length){
+    clearTemporarySelection();
+    startIndex = null;
+    return;
+  }
+
+  const word = currentSelection
+    .map(index=>grid.children[index].textContent)
+    .join("")
+    .toLowerCase();
+
+  const reversed = [...word].reverse().join("");
+
+  let matchedWord = null;
+
+  if(validWords.includes(word)){
+    matchedWord = word;
+  }else if(validWords.includes(reversed)){
+    matchedWord = reversed;
+  }
+
+  if(matchedWord && !foundWords.has(matchedWord)){
+
+    currentSelection.forEach(index=>{
+      foundCells.add(index);
+
+      const cell = grid.children[index];
+
+      if(cell){
+        cell.classList.remove("selected");
+        cell.classList.add("found");
+      }
+    });
+
+    foundWords.add(matchedWord);
+    currentSelection = [];
+
+    status.textContent =
+      "Word found: " +
+      matchedWord.toUpperCase() +
+      " — " +
+      foundWords.size +
+      " of 4 found.";
+
+  }else{
+
+    clearTemporarySelection();
+
+    if(matchedWord && foundWords.has(matchedWord)){
+      status.textContent =
+        matchedWord.toUpperCase() +
+        " has already been found.";
+    }else{
+      status.textContent =
+        "That selection is not one of today's hidden words.";
+    }
+  }
+
+  startIndex = null;
+}
+
+rows.forEach((row,rowIndex)=>{
+  [...row].forEach((letter,columnIndex)=>{
+
+    const cell = document.createElement("div");
+
+    cell.className = "cell";
+    cell.textContent = letter;
+    cell.dataset.index = rowIndex*15+columnIndex;
+    cell.setAttribute("aria-label","Letter " + letter);
+
     grid.appendChild(cell);
   });
 });
 
-let selecting=false;
-let startIndex=null;
-let currentSelection=[];
-const foundCells=new Set();
-function clearSelection(){
-  currentSelection.forEach(i=>{
-    grid.children[i].classList.remove('selected');
-  });
-  currentSelection=[];
-  startIndex=null;
-}
+grid.addEventListener("pointerdown",event=>{
 
-function getLine(start,end){
-  const r1=Math.floor(start/15);
-  const c1=start%15;
-  const r2=Math.floor(end/15);
-  const c2=end%15;
+  const cell = event.target.closest(".cell");
 
-  const dr=Math.sign(r2-r1);
-  const dc=Math.sign(c2-c1);
-
-  if(r1!==r2 && c1!==c2 && Math.abs(r2-r1)!==Math.abs(c2-c1)){
-    return [];
-  }
-
-  const distance=Math.max(
-    Math.abs(r2-r1),
-    Math.abs(c2-c1)
-  );
-
-  const result=[];
-
-  for(let i=0;i<=distance;i++){
-    result.push((r1+dr*i)*15+(c1+dc*i));
-  }
-
-  return result;
-}
-
-function clearSelection(){
-  currentSelection.forEach(i=>{
-    if(!foundCells.has(i)){
-      grid.children[i].classList.remove('selected');
-    }
-  });
-
-  currentSelection=[];
-  startIndex=null;
-}
-
-function getLine(start,end){
-  const r1=Math.floor(start/15);
-  const c1=start%15;
-  const r2=Math.floor(end/15);
-  const c2=end%15;
-
-  const dr=Math.sign(r2-r1);
-  const dc=Math.sign(c2-c1);
-
-  if(r1!==r2 && c1!==c2 && Math.abs(r2-r1)!==Math.abs(c2-c1)){
-    return [];
-  }
-
-  const distance=Math.max(
-    Math.abs(r2-r1),
-    Math.abs(c2-c1)
-  );
-
-  const result=[];
-
-  for(let i=0;i<=distance;i++){
-    result.push((r1+dr*i)*15+(c1+dc*i));
-  }
-
-  return result;
-}
-
-function paint(indices){
-  clearSelection();
-
-  currentSelection=indices;
-
-  indices.forEach(i=>{
-    if(!foundCells.has(i)){
-      grid.children[i].classList.add('selected');
-    }
-  });
-}
-
-grid.querySelectorAll('.cell').forEach((cell,i)=>{
-
-  cell.addEventListener('pointerdown',e=>{
-    e.preventDefault();
-
-    selecting=true;
-    startIndex=i;
-
-    
-    paint([i]);
-  });
-
- cell.addEventListener('pointermove',e=>{
-  if(!selecting) return;
-
-  e.preventDefault();
-
-  const line=getLine(startIndex,i);
-
-  if(line.length){
-    paint(line);
-  }
-});
-
-document.addEventListener('pointerup',()=>{
-  if(!selecting) return;
-
-  selecting=false;
-
-  if(!currentSelection.length){
-    clearSelection();
+  if(!cell){
     return;
   }
 
-  const word=currentSelection
-    .map(i=>grid.children[i].textContent)
-    .join('')
-    .toLowerCase();
+  event.preventDefault();
 
-  const reversed=[...word].reverse().join('');
+  selecting = true;
+  startIndex = Number(cell.dataset.index);
 
-  const valid=[
-    'personalization',
-    'split',
-    'zerogravity',
-    'adjustablebase'
-  ];
+  paintSelection([startIndex]);
 
-  if(valid.includes(word) || valid.includes(reversed)){
-
-    currentSelection.forEach(i=>{
-      foundCells.add(i);
-      grid.children[i].classList.remove('selected');
-      grid.children[i].classList.add('found');
-    });
-
-    currentSelection=[];
-    startIndex=null;
-
-  }else{
-    clearSelection();
-  }
+  status.textContent = "Keep dragging to select the word.";
 });
-document.getElementById('submit').addEventListener('click',()=>{
-  const answers=[1,2,3,4].map(i=>
-    document.getElementById('a'+i).value.trim().toLowerCase()
+
+document.addEventListener("pointermove",event=>{
+
+  if(!selecting || startIndex === null){
+    return;
+  }
+
+  event.preventDefault();
+
+  const index = getCellIndexFromPoint(
+    event.clientX,
+    event.clientY
   );
 
-  const accepted=[
-    ['personalization','personalisation'],
-    ['split'],
-    ['zero gravity','zerogravity'],
-    ['adjustable base','adjustablebase']
-  ];
-
-  const result=document.getElementById('result');
-
-  if(answers.every((v,i)=>accepted[i].includes(v))){
-    result.className='success';
-    result.innerHTML='<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Final Evidence Unlocked</h3><p class="message">PERSONALIZATION • SPLIT • ZERO GRAVITY • ADJUSTABLE BASE</p><p>Investigators have reconstructed the demonstration. The evidence points strongly toward Barry.</p><p>The culprit was not trying to destroy Casper. They were demonstrating a complete approach to sleep: position, support, comfort, and sleep.</p><p><strong>The final question remains: why would Barry stage the entire crime?</strong></p></div>';
-  }else{
-    result.className='error';
-    result.innerHTML='<h3>ACCESS DENIED</h3><p>One or more answers is incorrect. Go back to the clues and try again.</p>';
+  if(index === null){
+    return;
   }
 
-  result.style.display='block';
-  result.scrollIntoView({behavior:'smooth',block:'nearest'});
+  const line = getLine(startIndex,index);
+
+  if(line.length){
+    paintSelection(line);
+  }
 });
-</script>
-</script>
-  </section>
 
-  <section class="section">
-    <div class="warning"><strong>Weekend investigation:</strong> No new clue is released after Friday. Review the week’s evidence and prepare your final detective report.</div>
-  </section>
+document.addEventListener("pointerup",event=>{
 
-  <div class="footer">The Case of the Murdered Sleep • Casper Sleep Police</div>
-</div>
+  if(!selecting){
+    return;
+  }
+
+  event.preventDefault();
+  finishSelection();
+});
+
+document.addEventListener("pointercancel",()=>{
+
+  if(selecting){
+    selecting = false;
+    clearTemporarySelection();
+    startIndex = null;
+    status.textContent = "";
+  }
+});
+
+document.getElementById("submit").addEventListener("click",()=>{
+
+  const answers = [1,2,3,4].map(i=>
+    clean(document.getElementById("a"+i).value)
+  );
+
+  const accepted = [
+    ["personalization","personalisation"],
+    ["split"],
+    ["zero gravity","zerogravity"],
+    ["adjustable base","adjustablebase","base","bases"]
+  ];
+
+  const answersCorrect = answers.every((answer,index)=>{
+    return accepted[index].some(
+      option=>clean(option) === answer
+    );
+  });
+
+  const wordsCorrect = foundWords.size === 4;
+
+  if(answersCorrect && wordsCorrect){
+
+    result.className = "success";
+
+    result.innerHTML = `
+      <h2>ACCESS GRANTED</h2>
+
+      <div class="evidence">
+        <h3>Final Evidence Unlocked</h3>
+
+        <p class="message">PERSONALIZATION • SPLIT • ZERO GRAVITY • ADJUSTABLE BASE</p>
+
+        <p>Investigators have reconstructed the entire overnight demonstration.</p>
+
+        <p>It centered on personalization, Split positioning, Zero Gravity, and the Adjustable Base.</p>
+
+        <p>Those four elements are closely associated with Barry's daily demonstrations.</p>
+
+        <p><strong>The evidence now points strongly toward Barry.</strong></p>
+
+        <p>But the detectives still have one final question: why would Barry stage the entire crime?</p>
+
+        <p><strong>CASE CLOSED... FOR NOW.</strong></p>
+      </div>
+    `;
+
+  }else{
+
+    result.className = "error";
+
+    let message = "<h3>ACCESS DENIED</h3>";
+
+    if(!answersCorrect){
+      message += "<p>One or more answers is incorrect. Go back to the clues and check your answers.</p>";
+    }
+
+    if(!wordsCorrect){
+      message += "<p>You still need to find all four hidden words in the word search.</p>";
+      message += "<p>Words found: " + foundWords.size + " of 4.</p>";
+    }
+
+    result.innerHTML = message;
+  }
+
+  result.style.display = "block";
+
+  result.scrollIntoView({
+    behavior:"smooth",
+    block:"nearest"
+  });
+
+});
+
+</script>
 
 </body>
 </html>
