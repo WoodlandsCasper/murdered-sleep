@@ -5,179 +5,203 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Case of the Murdered Sleep — Wednesday</title>
 <style>
+
 :root{
-  --ink:#1e1e1e;
-  --muted:#666;
-  --paper:#fff;
-  --soft:#f3f2ef;
-  --selected:#d5d3ce;
-  --found:#b48a48;
+  --ink:#1b1b1b;
+  --muted:#6f6b64;
+  --paper:#fffdf8;
+  --cream:#f4f0e7;
+  --line:#d8d0c4;
+  --accent:#7a1f2b;
+  --accent2:#b48a48;
+  --green:#2d5b4a;
+  --shadow:0 16px 45px rgba(25,20,15,.12);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
   margin:0;
-  padding:24px;
-  background:#e9e7e2;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(180,138,72,.10), transparent 28%),
+    radial-gradient(circle at 85% 20%, rgba(122,31,43,.08), transparent 30%),
+    var(--cream);
   color:var(--ink);
   font-family:Georgia,"Times New Roman",serif;
 }
-.page{
-  max-width:900px;
-  margin:auto;
-  background:var(--paper);
-  border:1px solid #bbb;
-  padding:34px;
+a{color:inherit}
+.site-shell{max-width:1050px;margin:0 auto;padding:24px 18px 60px}
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:10px 0 18px;font-family:Arial,sans-serif;font-size:12px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted)
 }
-.kicker{
-  text-align:center;
-  letter-spacing:2px;
-  font-size:13px;
-  color:var(--muted);
+.brand{font-weight:800;color:var(--accent)}
+.nav a{text-decoration:none;margin-left:14px}
+.hero{
+  position:relative;overflow:hidden;border:1px solid var(--line);
+  background:var(--paper);box-shadow:var(--shadow);border-radius:18px;
+  padding:42px 42px 34px;margin-bottom:22px;
 }
-h1{
-  text-align:center;
-  font-size:34px;
-  margin:8px 0 4px;
+.hero:after{
+  content:"";position:absolute;width:240px;height:240px;border:1px solid rgba(122,31,43,.16);
+  border-radius:50%;right:-90px;top:-90px;
 }
-.subtitle{
-  text-align:center;
-  color:var(--muted);
-  margin-bottom:28px;
-}
-.instructions{
-  background:var(--soft);
-  border-left:4px solid #333;
-  padding:18px;
-  line-height:1.55;
-}
-.case-clue{
-  margin:24px 0;
-  padding:22px;
-  border:2px solid #222;
-  background:#f8f8f8;
-  border-radius:8px;
-}
-.case-clue h2{margin-top:0}
-.clue-text{
-  white-space:pre-wrap;
-  line-height:1.65;
-}
-.clue{margin:22px 0}
-.clue label{
-  display:block;
-  font-weight:bold;
-  margin-bottom:8px;
-}
-input{
-  width:100%;
-  padding:12px 13px;
-  font:16px Arial,sans-serif;
-  border:1px solid #999;
-  border-radius:3px;
-}
-input:focus{
-  outline:2px solid #555;
-  outline-offset:1px;
-}
-.wordgrid{
-  display:grid;
-  grid-template-columns:repeat(15,1fr);
-  gap:3px;
-  max-width:650px;
-  margin:20px auto;
-  background:#d5d3ce;
-  padding:7px;
-  touch-action:none;
-  user-select:none;
-  -webkit-user-select:none;
-}
-.cell{
+.eyebrow{font:800 12px Arial,sans-serif;letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
+h1{font-size:clamp(38px,6vw,68px);line-height:.95;margin:10px 0 14px;letter-spacing:-.035em}
+.hero p{max-width:760px;font-size:18px;line-height:1.65;margin:0;color:#4d4942}
+.case-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.pill{
+  border:1px solid var(--line);border-radius:999px;padding:8px 12px;
+  font:700 11px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;
   background:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  aspect-ratio:1;
-  min-width:0;
-  border:1px solid #bbb;
-  border-radius:3px;
-  font:700 17px Arial,sans-serif;
-  cursor:crosshair;
-  user-select:none;
-  -webkit-user-select:none;
-  touch-action:none;
 }
-.cell.selected{background:var(--selected)}
-.cell.found{background:var(--found);color:#fff}
-button{
-  display:block;
-  margin:25px auto 0;
-  padding:14px 28px;
-  border:0;
-  background:#222;
-  color:#fff;
-  font-size:17px;
-  cursor:pointer;
+.section{
+  border:1px solid var(--line);background:var(--paper);border-radius:16px;
+  box-shadow:0 8px 25px rgba(25,20,15,.07);padding:28px;margin-top:20px
 }
-button:hover{background:#444}
-#result{
-  display:none;
-  margin-top:26px;
-  padding:24px;
-  border:2px solid #222;
-  background:#fafafa;
-  line-height:1.6;
+.section h2{margin:0 0 14px;font-size:28px}
+.clue-card{
+  white-space:pre-wrap;font-size:18px;line-height:1.72;
+  background:#fff;border-left:5px solid var(--accent);padding:22px 24px;
+  border-radius:10px;
 }
-.error{color:#8b1e1e}
-.evidence{
-  margin-top:18px;
-  padding:18px;
-  background:#eee;
+.game-intro{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:20px;
+  margin-bottom:14px
 }
-.message{
-  font-family:Arial,sans-serif;
-  font-size:18px;
-  letter-spacing:.5px;
-  font-weight:bold;
+.game-intro p{margin:0;color:var(--muted);line-height:1.55}
+.badge{
+  flex:none;background:var(--accent);color:white;padding:8px 12px;border-radius:6px;
+  font:800 11px Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase
 }
-.small{
-  color:#666;
-  font-size:14px;
+.back-link{
+  display:inline-flex;align-items:center;gap:7px;text-decoration:none;
+  font:700 12px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent);margin-top:16px
 }
-.status{
-  text-align:center;
-  font:14px Arial,sans-serif;
-  color:#666;
-  min-height:20px;
-  margin-top:8px;
+.footer{text-align:center;color:var(--muted);font:12px Arial,sans-serif;padding:30px 0}
+.instructions-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.info-card{border:1px solid var(--line);background:#fff;padding:20px;border-radius:12px}
+.info-card h3{margin:0 0 8px;font-size:20px}
+.info-card p,.info-card li{line-height:1.6;color:#4d4942}
+.timeline{display:grid;gap:10px}
+.timeline-row{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:14px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.timeline-row strong{color:var(--accent);font-family:Arial,sans-serif;letter-spacing:.08em}
+.warning{border-left:5px solid var(--accent2);background:#fbf6e9;padding:16px 18px;border-radius:8px;line-height:1.55}
+.start-button{
+  display:inline-block;margin-top:22px;background:var(--accent);color:#fff;text-decoration:none;
+  padding:13px 18px;border-radius:7px;font:800 12px Arial,sans-serif;
+  letter-spacing:.1em;text-transform:uppercase
+}
+@media(max-width:720px){
+ .hero{padding:30px 24px}.section{padding:21px}
+ .instructions-grid{grid-template-columns:1fr}
+ .timeline-row{grid-template-columns:1fr;gap:5px}
+ .topbar{align-items:flex-start;flex-direction:column}
+ .nav a{margin:0 12px 0 0}
+}
+
+
+:root{--ink:#1e1e1e;--muted:#666;--paper:#fff;--soft:#f3f2ef}
+*{box-sizing:border-box} body{margin:0;padding:24px;background:#e9e7e2;color:var(--ink);font-family:Georgia,"Times New Roman",serif}
+.page{max-width:900px;margin:auto;background:#fff;border:1px solid #bbb;padding:34px}
+.kicker{text-align:center;letter-spacing:2px;font-size:13px;color:#666}h1{text-align:center;font-size:34px;margin:8px 0 4px}
+.subtitle{text-align:center;color:#666;margin-bottom:28px}.instructions{background:var(--soft);border-left:4px solid #333;padding:18px;line-height:1.55}
+h2{margin-top:28px;font-size:23px}.clue{margin:22px 0}.clue label{display:block;font-weight:bold;margin-bottom:8px}
+input{width:100%;padding:12px 13px;font:16px Arial,sans-serif;border:1px solid #999;border-radius:3px}
+input:focus{outline:2px solid #555;outline-offset:1px}.wordgrid{display:grid;grid-template-columns:repeat(15,1fr);gap:2px;max-width:630px;margin:20px auto;background:#d5d3ce;padding:7px}
+.cell{background:#fff;text-align:center;font:700 15px Arial,sans-serif;padding:7px 1px;user-select:none}
+button{display:block;margin:25px auto 0;padding:14px 28px;border:0;background:#222;color:#fff;font-size:17px;cursor:pointer}
+button:hover{background:#444}#result{display:none;margin-top:26px;padding:24px;border:2px solid #222;background:#fafafa;line-height:1.6}
+.error{color:#8b1e1e}.evidence{margin-top:18px;padding:18px;background:#eee}.message{font-family:Arial,sans-serif;font-size:18px;letter-spacing:.5px}
+.small{color:#666;font-size:14px}@media(max-width:600px){body{padding:8px}.page{padding:18px}h1{font-size:27px}.wordgrid{gap:1px;padding:4px}.cell{font-size:10px;padding:5px 0}}
+
+</style>
+
+<style id="fixed-word-search">
+.wordgrid{
+  display:grid !important;
+  grid-template-columns:repeat(15,minmax(0,1fr)) !important;
+  gap:4px !important;
+  max-width:720px !important;
+  margin:22px auto !important;
+  padding:10px !important;
+  background:#d7d4ce !important;
+  border-radius:8px !important;
+  touch-action:none !important;
+}
+.wordgrid .cell{
+  appearance:none;
+  -webkit-appearance:none;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:100% !important;
+  aspect-ratio:1 !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  border:1px solid #bbb !important;
+  border-radius:4px !important;
+  background:#fff !important;
+  color:#111 !important;
+  font:700 18px Arial,sans-serif !important;
+  padding:0 !important;
+  margin:0 !important;
+  cursor:pointer !important;
+  user-select:none !important;
+  -webkit-user-select:none !important;
+  touch-action:none !important;
+}
+.wordgrid .cell.selected{
+  background:#d8cf9b !important;
+  box-shadow:inset 0 0 0 2px #8b7b2d !important;
+}
+.wordgrid .cell.found{
+  background:#c6b45a !important;
+  box-shadow:inset 0 0 0 2px #75651f !important;
+}
+.word-search-help{
+  background:#f5f1df;
+  border:1px solid #b8a85e;
+  padding:14px 16px;
+  border-radius:7px;
+  margin:14px 0;
+  line-height:1.5;
 }
 @media(max-width:600px){
-  body{padding:8px}
-  .page{padding:18px}
-  h1{font-size:27px}
-  .wordgrid{gap:2px;padding:5px}
-  .cell{font-size:11px}
+  .wordgrid{gap:2px !important;padding:5px !important}
+  .wordgrid .cell{font-size:11px !important}
 }
 </style>
 </head>
 <body>
-<main class="page">
+<div class="site-shell">
+  <div class="topbar">
+    <div class="brand">Casper Sleep Police</div>
+    <div class="nav"><a href="instructions.html">How to Play</a><a href="tuesday.html">← Tuesday</a></div>
+  </div>
 
-  <div class="kicker">CASPER SLEEP POLICE</div>
-  <h1>The Case of the Murdered Sleep</h1>
-  <div class="subtitle">Wednesday Detective Challenge: The Pillow</div>
+  <header class="hero">
+    <div class="eyebrow">CASE FILE 03 • WEDNESDAY</div>
+    <h1>The Case of<br>the Murdered Sleep</h1>
+    <p>The Pillow. Read today’s evidence carefully, then solve the detective challenge below. Your answers unlock classified evidence automatically.</p>
+    <div class="case-meta">
+      <span class="pill">Daily Investigation</span>
+      <span class="pill">Interactive Puzzle</span>
+      <span class="pill">Evidence Unlock</span>
+    </div>
+    
+  </header>
 
-  <section class="instructions">
-    <strong>Detective Instructions</strong>
-    <p>Solve the four clues below. The answers are not given to you.</p>
-    <p>Once you solve each clue, find that answer hidden somewhere in the word search.</p>
-    <p>Enter the four answers in the order of the clues. Find all four hidden words, then submit your answers to unlock today's classified evidence.</p>
-    <p class="small">Words may run horizontally, vertically, diagonally, forwards, or backwards. Click and hold the first letter, drag across the word, and release. You can also click the first letter and then click the last letter.</p>
-  </section>
-
-  <section class="case-clue">
-    <h2>Wednesday Case Update</h2>
-    <div class="clue-text">Case Update — Day 3
+  <section class="section">
+    <div class="game-intro">
+      <div>
+        <div class="eyebrow">CASE FILE 03</div>
+        <h2>The Pillow</h2>
+      </div>
+      <div class="badge">Read the Clue</div>
+    </div>
+    <div class="clue-card">Case Update — Day 3
 
 The missing pillow has been found.
 
@@ -208,244 +232,184 @@ And Nora knows the showroom.
 So now investigators have a new question:
 
 Was the crime about a product... or about a philosophy of sleep?</div>
+    <a class="back-link" href="#detective-game">↓ Continue to today’s detective game</a>
   </section>
 
-  <h2>Solve the Clues</h2>
-  <div class="clue"><label for="a1">Clue 1: What do you put your head on when sleeping?</label><input id="a1" autocomplete="off"></div>
-  <div class="clue"><label for="a2">Clue 2: What word means something was physically shifted from one place to another?</label><input id="a2" autocomplete="off"></div>
-  <div class="clue"><label for="a3">Clue 3: What word means earlier than another event?</label><input id="a3" autocomplete="off"></div>
-  <div class="clue"><label for="a4">Clue 4: What is a demonstration or presentation of how a product works called?</label><input id="a4" autocomplete="off"></div>
+  <section class="section" id="detective-game">
+    <div class="game-intro">
+      <div>
+        <div class="eyebrow">Interactive Challenge</div>
+        <h2>The Pillow Timeline</h2>
+        <p>Solve the four clues, find the answers in the word search, and unlock today’s classified evidence.</p>
+      </div>
+      <div class="badge">Solve the Case</div>
+    </div>
+    <main class="page">
 
-  <h2>Find Your Answers</h2>
-  <p>Find all four answers in the word search. Correctly found words remain highlighted so you can continue searching.</p>
 
-  <div class="wordgrid" id="grid" aria-label="Wednesday word search"></div>
-  <div class="status" id="status"></div>
-
-  <button type="button" id="submit">Unlock Evidence</button>
-  <div id="result" aria-live="polite"></div>
-
+<section class="instructions"><strong>Detective Instructions</strong>
+<p>Solve the four clues below. The answers are not given to you.</p>
+<p>Once you solve each clue, find that answer hidden somewhere in the word search.</p>
+<p>Enter the four answers in the order of the clues. When all four are correct, today's classified evidence will unlock automatically.</p>
+<p class="small">Do not submit your answers to the Game Director. The puzzle will tell you when you have cracked the case.</p></section>
+<h2>Solve the Clues</h2><div class="clue"><label for="a1">Clue 1: What do you put your head on when sleeping?</label><input id="a1" autocomplete="off"></div>
+<div class="clue"><label for="a2">Clue 2: What word means something was physically shifted from one place to another?</label><input id="a2" autocomplete="off"></div>
+<div class="clue"><label for="a3">Clue 3: What word means earlier than another event?</label><input id="a3" autocomplete="off"></div>
+<div class="clue"><label for="a4">Clue 4: What is a demonstration or presentation of how a product works called?</label><input id="a4" autocomplete="off"></div>
+<h2>Find Your Answers</h2><p>Find all four answers in the word search. They may appear horizontally, vertically, diagonally, forwards, or backwards.</p>
+<div class="word-search-help"><strong>HOW TO PLAY:</strong> Click or tap the first letter of a word, then click or tap the last letter. The word will highlight. You can also drag from the first letter to the last. Words may run horizontally, vertically, diagonally, forwards, or backwards.</div>
+  <div class="wordgrid" id="grid"></div>
+<button type="button" id="submit">Unlock Evidence</button><div id="result" aria-live="polite"></div>
 </main>
 
-<script>
-const rows = [
-  "VISBYXBLLBBHVRE",
-  "ADYZWEBBALXOTSA",
-  "ZXMUBDZGPRQWJEE",
-  "GOSHAKTSJWEQBDZ",
-  "UDDEWBUOOZOKDEE",
-  "KBERKALLYPAPSPE",
-  "QVMOCMLQPSCWEBX",
-  "QWOFZIYEQUHLOUB",
-  "VSMEPJVXUCSITWS",
-  "GWRBDYKGIXHDGTP",
-  "HLYCEOQDTMYOEOX",
-  "FCPBVIOZOKNMXDM",
-  "IAWBONKHGETAPAD",
-  "SVCZMDIQJKGRKQP",
-  "ESSETJQAQKALAZR"
-];
-const accepted = [["pillow", "pillows"], ["moved"], ["before"], ["demo", "demonstration"]];
+  </section>
 
-const grid = document.getElementById("grid");
-const status = document.getElementById("status");
-const result = document.getElementById("result");
+  <section class="section">
+  </section>
 
-let selecting = false;
-let startIndex = null;
-let currentSelection = [];
-const foundCells = new Set();
-const foundWords = new Set();
+  <div class="footer">The Case of the Murdered Sleep • Casper Sleep Police</div>
+</div>
 
-function clean(value){
-  return value.trim().toLowerCase().replace(/[^a-z]/g,"");
-}
-
+<script id="fixed-word-search-script">
+const rows=["VISBYXBLLBBHVRE","ADYZWEBBALXOTSA","ZXMUBDZGPRQWJEE","GOSHAKTSJWEQBDZ","UDDEWBUOOZOKDEE","KBERKALLYPAPSPE","QVMOCMLQPSCWEBX","QWOFZIYEQUHLOUB","VSMEPJVXUCSITWS","GWRBDYKGIXHDGTP","HLYCEOQDTMYOEOX","FCPBVIOZOKNMXDM","IAWBONKHGETAPAD","SVCZMDIQJKGRKQP","ESSETJQAQKALAZR"];
+const validWords=["pillow","moved","before","demo"];
+const answers=[["pillow","pillows"],["moved"],["before"],["demo","demonstration"]];
+const grid=document.getElementById("grid");
+const status=document.getElementById("result");
+const cells=[];
+rows.forEach((row,r)=>[...row].forEach((ch,c)=>{
+  const cell=document.createElement("button");
+  cell.type="button";
+  cell.className="cell";
+  cell.textContent=ch;
+  cell.dataset.index=r*15+c;
+  cell.dataset.r=r;
+  cell.dataset.c=c;
+  grid.appendChild(cell);
+  cells.push(cell);
+}));
+function clean(value){return value.trim().toLowerCase().replace(/[^a-z]/g,"");}
 function getCellIndexFromPoint(x,y){
-  const element = document.elementFromPoint(x,y);
-  const cell = element ? element.closest(".cell") : null;
+  const element=document.elementFromPoint(x,y);
+  const cell=element ? element.closest(".cell") : null;
   if(!cell || !grid.contains(cell)) return null;
   return Number(cell.dataset.index);
 }
-
 function getLine(start,end){
-  const r1 = Math.floor(start/15);
-  const c1 = start%15;
-  const r2 = Math.floor(end/15);
-  const c2 = end%15;
-
-  const dr = r2-r1;
-  const dc = c2-c1;
-
-  if(dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)) return [];
-
-  const steps = Math.max(Math.abs(dr),Math.abs(dc));
-  const sr = Math.sign(dr);
-  const sc = Math.sign(dc);
-  const line = [];
-
-  for(let i=0;i<=steps;i++){
-    line.push((r1+sr*i)*15 + (c1+sc*i));
-  }
-
+  const r1=Math.floor(start/15), c1=start%15;
+  const r2=Math.floor(end/15), c2=end%15;
+  const dr=r2-r1, dc=c2-c1;
+  if(dr!==0 && dc!==0 && Math.abs(dr)!==Math.abs(dc)) return [];
+  const steps=Math.max(Math.abs(dr),Math.abs(dc));
+  const sr=Math.sign(dr), sc=Math.sign(dc);
+  const line=[];
+  for(let i=0;i<=steps;i++) line.push((r1+sr*i)*15+(c1+sc*i));
   return line;
 }
-
+let selecting=false;
+let startIndex=null;
+let currentSelection=[];
+const foundCells=new Set();
+const foundWords=new Set();
 function clearTemporary(){
   currentSelection.forEach(i=>{
-    const cell = grid.children[i];
+    const cell=cells[i];
     if(cell && !foundCells.has(i)) cell.classList.remove("selected");
   });
-  currentSelection = [];
+  currentSelection=[];
 }
-
 function paint(line){
   clearTemporary();
-  currentSelection = line;
-
+  currentSelection=line;
   line.forEach(i=>{
-    const cell = grid.children[i];
+    const cell=cells[i];
     if(cell && !foundCells.has(i)) cell.classList.add("selected");
   });
 }
-
 function finishSelection(){
   if(!selecting) return;
-
-  selecting = false;
-
-  if(!currentSelection.length){
-    startIndex = null;
-    return;
-  }
-
-  const word = currentSelection.map(i=>grid.children[i].textContent).join("").toLowerCase();
-  const reverse = [...word].reverse().join("");
-
-  let matched = null;
-
-  for(const options of accepted){
-    for(const answer of options){
-      const normalized = clean(answer);
-      if(normalized === word || normalized === reverse){
-        matched = normalized;
-        break;
-      }
-    }
-    if(matched) break;
-  }
-
+  selecting=false;
+  if(!currentSelection.length){startIndex=null;return;}
+  const word=currentSelection.map(i=>cells[i].textContent).join("").toLowerCase();
+  const reverse=[...word].reverse().join("");
+  let matched=null;
+  if(validWords.includes(word)) matched=word;
+  else if(validWords.includes(reverse)) matched=reverse;
   if(matched && !foundWords.has(matched)){
     currentSelection.forEach(i=>{
       foundCells.add(i);
-      const cell = grid.children[i];
-      if(cell){
-        cell.classList.remove("selected");
-        cell.classList.add("found");
-      }
+      const cell=cells[i];
+      if(cell){cell.classList.remove("selected");cell.classList.add("found");}
     });
-
     foundWords.add(matched);
-    currentSelection = [];
-    status.textContent = "Word found: " + matched.toUpperCase() + " — " + foundWords.size + " of 4 found.";
-  } else if(matched){
+    const answerIndex=validWords.indexOf(matched);
+    const input=document.getElementById("a"+(answerIndex+1));
+    if(input) input.value=answers[answerIndex][0];
+    status.textContent="Word found: "+matched.toUpperCase()+" — "+foundWords.size+" of 4 found.";
+    currentSelection=[];
+  }else if(matched){
     clearTemporary();
-    status.textContent = matched.toUpperCase() + " has already been found.";
-  } else{
+    status.textContent=matched.toUpperCase()+" has already been found.";
+  }else{
     clearTemporary();
-    status.textContent = "That selection is not one of today's hidden words.";
+    status.textContent="That selection is not one of today's hidden words.";
   }
-
-  startIndex = null;
+  startIndex=null;
 }
-
-rows.forEach((row,r)=>{
-  [...row].forEach((letter,c)=>{
-    const cell = document.createElement("div");
-    cell.className = "cell";
-    cell.textContent = letter;
-    cell.dataset.index = r*15+c;
-    grid.appendChild(cell);
-  });
-});
-
-grid.addEventListener("pointerdown",e=>{
-  const cell = e.target.closest(".cell");
-  if(!cell) return;
-
-  e.preventDefault();
-  selecting = true;
-  startIndex = Number(cell.dataset.index);
+grid.addEventListener("pointerdown",event=>{
+  const cell=event.target.closest(".cell");
+  if(!cell || !grid.contains(cell)) return;
+  event.preventDefault();
+  selecting=true;
+  startIndex=Number(cell.dataset.index);
   paint([startIndex]);
-  status.textContent = "Keep dragging to select the word.";
+  status.textContent="Keep dragging to select the word.";
 });
-
-document.addEventListener("pointermove",e=>{
-  if(!selecting || startIndex === null) return;
-
-  e.preventDefault();
-
-  const index = getCellIndexFromPoint(e.clientX,e.clientY);
-  if(index === null) return;
-
-  const line = getLine(startIndex,index);
+document.addEventListener("pointermove",event=>{
+  if(!selecting || startIndex===null) return;
+  event.preventDefault();
+  const index=getCellIndexFromPoint(event.clientX,event.clientY);
+  if(index===null) return;
+  const line=getLine(startIndex,index);
   if(line.length) paint(line);
 });
-
-document.addEventListener("pointerup",e=>{
+document.addEventListener("pointerup",event=>{
   if(!selecting) return;
-  e.preventDefault();
+  event.preventDefault();
+  const index=getCellIndexFromPoint(event.clientX,event.clientY);
+  if(index!==null){
+    const line=getLine(startIndex,index);
+    if(line.length) paint(line);
+  }
   finishSelection();
 });
-
 document.addEventListener("pointercancel",()=>{
   if(selecting){
-    selecting = false;
+    selecting=false;
     clearTemporary();
-    startIndex = null;
-    status.textContent = "";
+    startIndex=null;
+    status.textContent="";
   }
 });
-
 document.getElementById("submit").addEventListener("click",()=>{
-  const answers = [1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
-
-  const answersCorrect = answers.every((answer,index)=>
-    accepted[index].some(option=>clean(option)===answer)
-  );
-
-  const wordsCorrect = foundWords.size === 4;
-
-  if(answersCorrect && wordsCorrect){
-    result.className = "success";
-    result.innerHTML = `
-      <h2>ACCESS GRANTED</h2>
-      <div class="evidence">
-        <h3>Bonus Evidence Unlocked</h3>
-        <p class="message">PILLOW MOVED BEFORE DEMO</p>
-        <p>Investigators reviewed the showroom motion sensors.</p>
-        <p>The pillow was moved before the Adjustable Base was activated.</p>
-        <p>The pillow was not part of a random mess.</p>
-        <p>It was positioned before the demonstration began.</p>
-        <p>Someone planned the sleep setup before the demonstration.</p>
-      </div>
-    `;
-  }else{
-    result.className = "error";
-    let message = "<h3>ACCESS DENIED</h3>";
-
-    if(!answersCorrect)
-      message += "<p>One or more answers is incorrect.</p>";
-
-    if(!wordsCorrect)
-      message += "<p>You still need to find all four hidden words. Words found: " + foundWords.size + " of 4.</p>";
-
-    result.innerHTML = message;
+  const entered=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
+  const correct=entered.every((value,i)=>answers[i].some(option=>clean(option)===value));
+  if(!correct){
+    status.className="error";
+    status.innerHTML='<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>';
+    status.style.display="block";
+    return;
   }
-
-  result.style.display = "block";
-  result.scrollIntoView({behavior:"smooth",block:"nearest"});
+  if(foundWords.size<4){
+    status.className="error";
+    status.innerHTML='<h3>ALMOST THERE</h3><p>You have the right answers, but all four hidden words must be found in the puzzle first.</p><p>Found: '+foundWords.size+' of 4.</p>';
+    status.style.display="block";
+    return;
+  }
+  status.className="success";
+  status.innerHTML='<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Bonus Evidence Unlocked</h3><p class="message">PILLOW MOVED BEFORE DEMO</p><p>Investigators reviewed the showroom motion sensors.</p><p>The pillow was moved before the Adjustable Base was activated.</p><p>The pillow was not part of a random mess.</p><p>It was positioned before the demonstration began.</p><p>Someone planned the sleep setup before the demonstration.</p></div>';
+  status.style.display="block";
+  status.scrollIntoView({behavior:"smooth",block:"nearest"});
 });
-</script>
-</body>
+</script></body>
 </html>
