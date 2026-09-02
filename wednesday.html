@@ -1,123 +1,451 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Case of the Murdered Sleep — Wednesday</title>
 <style>
-:root{--ink:#1e1e1e;--muted:#666;--paper:#fff;--soft:#f3f2ef}
-*{box-sizing:border-box} body{margin:0;padding:24px;background:#e9e7e2;color:var(--ink);font-family:Georgia,"Times New Roman",serif}
-.page{max-width:900px;margin:auto;background:#fff;border:1px solid #bbb;padding:34px}
-.kicker{text-align:center;letter-spacing:2px;font-size:13px;color:#666}h1{text-align:center;font-size:34px;margin:8px 0 4px}
-.subtitle{text-align:center;color:#666;margin-bottom:28px}.instructions{background:var(--soft);border-left:4px solid #333;padding:18px;line-height:1.55}
-h2{margin-top:28px;font-size:23px}.clue{margin:22px 0}.clue label{display:block;font-weight:bold;margin-bottom:8px}
-input{width:100%;padding:12px 13px;font:16px Arial,sans-serif;border:1px solid #999;border-radius:3px}
-input:focus{outline:2px solid #555;outline-offset:1px}.wordgrid{display:grid;grid-template-columns:repeat(15,1fr);gap:2px;max-width:630px;margin:20px auto;background:#d5d3ce;padding:7px}
-.cell{background:#fff;text-align:center;font:700 15px Arial,sans-serif;padding:7px 1px;user-select:none}
-button{display:block;margin:25px auto 0;padding:14px 28px;border:0;background:#222;color:#fff;font-size:17px;cursor:pointer}
-button:hover{background:#444}#result{display:none;margin-top:26px;padding:24px;border:2px solid #222;background:#fafafa;line-height:1.6}
-.error{color:#8b1e1e}.evidence{margin-top:18px;padding:18px;background:#eee}.message{font-family:Arial,sans-serif;font-size:18px;letter-spacing:.5px}
-.small{color:#666;font-size:14px}@media(max-width:600px){body{padding:8px}.page{padding:18px}h1{font-size:27px}.wordgrid{gap:1px;padding:4px}.cell{font-size:10px;padding:5px 0}}
-</style></head><body><main class="page">
-<div class="kicker">CASPER SLEEP POLICE</div><h1>The Case of the Murdered Sleep</h1>
-<div class="subtitle">Wednesday Detective Challenge: The Pillow Timeline</div>
-<section class="instructions"><strong>Detective Notes</strong><p>The missing pillow has been found.</p><p>It wasn't damaged, stolen, or thrown across the showroom. It had been deliberately placed on one of the mattresses — exactly where a customer's head would rest during a sleep demonstration.</p><p>Investigators immediately looked at Polly, since she knows pillows better than anyone. But Barry knows sleep positioning, and Nora knows the showroom.</p><p>So now investigators have a new question: Was the crime about a product... or about a philosophy of sleep?</p></section>
-<section class="instructions"><strong>Detective Instructions</strong>
-<p>Solve the four clues below. The answers are not given to you.</p>
-<p>Once you solve each clue, find that answer hidden somewhere in the word search.</p>
-<p>Enter the four answers in the order of the clues. When all four are correct, today's classified evidence will unlock automatically.</p>
-<p class="small">Do not submit your answers to the Game Director. The puzzle will tell you when you have cracked the case.</p></section>
-<h2>Solve the Clues</h2><div class="clue"><label for="a1">Clue 1: What do you put your head on when sleeping?</label><input id="a1" autocomplete="off"></div>
-<div class="clue"><label for="a2">Clue 2: What word means something was physically shifted from one place to another?</label><input id="a2" autocomplete="off"></div>
-<div class="clue"><label for="a3">Clue 3: What word means earlier than another event?</label><input id="a3" autocomplete="off"></div>
-<div class="clue"><label for="a4">Clue 4: What do you call a short presentation showing how a product works?</label><input id="a4" autocomplete="off"></div>
-<h2>Find Your Answers</h2><p>Find all four answers in the word search. They may appear horizontally, vertically, diagonally, forwards, or backwards.</p>
-<div class="wordgrid" id="grid"></div>
-<button type="button" id="submit">Unlock Evidence</button><div id="result" aria-live="polite"></div>
+:root{
+  --ink:#1e1e1e;
+  --muted:#666;
+  --paper:#fff;
+  --soft:#f3f2ef;
+  --selected:#d5d3ce;
+  --found:#b48a48;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  padding:24px;
+  background:#e9e7e2;
+  color:var(--ink);
+  font-family:Georgia,"Times New Roman",serif;
+}
+.page{
+  max-width:900px;
+  margin:auto;
+  background:var(--paper);
+  border:1px solid #bbb;
+  padding:34px;
+}
+.kicker{
+  text-align:center;
+  letter-spacing:2px;
+  font-size:13px;
+  color:var(--muted);
+}
+h1{
+  text-align:center;
+  font-size:34px;
+  margin:8px 0 4px;
+}
+.subtitle{
+  text-align:center;
+  color:var(--muted);
+  margin-bottom:28px;
+}
+.instructions{
+  background:var(--soft);
+  border-left:4px solid #333;
+  padding:18px;
+  line-height:1.55;
+}
+.case-clue{
+  margin:24px 0;
+  padding:22px;
+  border:2px solid #222;
+  background:#f8f8f8;
+  border-radius:8px;
+}
+.case-clue h2{margin-top:0}
+.clue-text{
+  white-space:pre-wrap;
+  line-height:1.65;
+}
+.clue{margin:22px 0}
+.clue label{
+  display:block;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+input{
+  width:100%;
+  padding:12px 13px;
+  font:16px Arial,sans-serif;
+  border:1px solid #999;
+  border-radius:3px;
+}
+input:focus{
+  outline:2px solid #555;
+  outline-offset:1px;
+}
+.wordgrid{
+  display:grid;
+  grid-template-columns:repeat(15,1fr);
+  gap:3px;
+  max-width:650px;
+  margin:20px auto;
+  background:#d5d3ce;
+  padding:7px;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.cell{
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  aspect-ratio:1;
+  min-width:0;
+  border:1px solid #bbb;
+  border-radius:3px;
+  font:700 17px Arial,sans-serif;
+  cursor:crosshair;
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:none;
+}
+.cell.selected{background:var(--selected)}
+.cell.found{background:var(--found);color:#fff}
+button{
+  display:block;
+  margin:25px auto 0;
+  padding:14px 28px;
+  border:0;
+  background:#222;
+  color:#fff;
+  font-size:17px;
+  cursor:pointer;
+}
+button:hover{background:#444}
+#result{
+  display:none;
+  margin-top:26px;
+  padding:24px;
+  border:2px solid #222;
+  background:#fafafa;
+  line-height:1.6;
+}
+.error{color:#8b1e1e}
+.evidence{
+  margin-top:18px;
+  padding:18px;
+  background:#eee;
+}
+.message{
+  font-family:Arial,sans-serif;
+  font-size:18px;
+  letter-spacing:.5px;
+  font-weight:bold;
+}
+.small{
+  color:#666;
+  font-size:14px;
+}
+.status{
+  text-align:center;
+  font:14px Arial,sans-serif;
+  color:#666;
+  min-height:20px;
+  margin-top:8px;
+}
+@media(max-width:600px){
+  body{padding:8px}
+  .page{padding:18px}
+  h1{font-size:27px}
+  .wordgrid{gap:2px;padding:5px}
+  .cell{font-size:11px}
+}
+</style>
+</head>
+<body>
+<main class="page">
+
+  <div class="kicker">CASPER SLEEP POLICE</div>
+  <h1>The Case of the Murdered Sleep</h1>
+  <div class="subtitle">Wednesday Detective Challenge: The Pillow</div>
+
+  <section class="instructions">
+    <strong>Detective Instructions</strong>
+    <p>Solve the four clues below. The answers are not given to you.</p>
+    <p>Once you solve each clue, find that answer hidden somewhere in the word search.</p>
+    <p>Enter the four answers in the order of the clues. Find all four hidden words, then submit your answers to unlock today's classified evidence.</p>
+    <p class="small">Words may run horizontally, vertically, diagonally, forwards, or backwards. Click and hold the first letter, drag across the word, and release. You can also click the first letter and then click the last letter.</p>
+  </section>
+
+  <section class="case-clue">
+    <h2>Wednesday Case Update</h2>
+    <div class="clue-text">Case Update — Day 3
+
+The missing pillow has been found.
+
+And here’s the strange part...
+
+It wasn’t damaged.
+It wasn’t stolen.
+It wasn’t thrown across the showroom.
+
+It had been deliberately placed on one of the mattresses.
+
+Investigators recreated the position.
+
+The pillow was exactly where a customer’s head would rest during a sleep demonstration.
+
+So the culprit wasn’t simply making a mess.
+
+They were demonstrating something.
+
+Investigators immediately looked at Polly.
+
+After all, Polly knows pillows better than anyone.
+
+But Barry knows sleep positioning.
+
+And Nora knows the showroom.
+
+So now investigators have a new question:
+
+Was the crime about a product... or about a philosophy of sleep?</div>
+  </section>
+
+  <h2>Solve the Clues</h2>
+  <div class="clue"><label for="a1">Clue 1: What do you put your head on when sleeping?</label><input id="a1" autocomplete="off"></div>
+  <div class="clue"><label for="a2">Clue 2: What word means something was physically shifted from one place to another?</label><input id="a2" autocomplete="off"></div>
+  <div class="clue"><label for="a3">Clue 3: What word means earlier than another event?</label><input id="a3" autocomplete="off"></div>
+  <div class="clue"><label for="a4">Clue 4: What is a demonstration or presentation of how a product works called?</label><input id="a4" autocomplete="off"></div>
+
+  <h2>Find Your Answers</h2>
+  <p>Find all four answers in the word search. Correctly found words remain highlighted so you can continue searching.</p>
+
+  <div class="wordgrid" id="grid" aria-label="Wednesday word search"></div>
+  <div class="status" id="status"></div>
+
+  <button type="button" id="submit">Unlock Evidence</button>
+  <div id="result" aria-live="polite"></div>
+
 </main>
+
 <script>
-const rows=['VISBYXBLLBBHVRE','ADYZWEBBALXOTSA','ZXMUBDZGPRQWJEE','GOSHAKTSJWEQBDZ','UDDEWBUOOZOKDEE','KBERKALLYPAPSPE','QVMOCMLQPSCWEBX','QWOFZIYEQUHLOUB','VSMEPJVXUCSITWS','GWRBDYKGIXHDGTP','HLYCEOQDTMYOEOX','FCPBVIOZOKNMXDM','IAWBONKHGETAPAD','SVCZMDIQJKGRKQP','ESSETJQAQKALAZR'];const grid=document.getElementById("grid");
+const rows = [
+  "VISBYXBLLBBHVRE",
+  "ADYZWEBBALXOTSA",
+  "ZXMUBDZGPRQWJEE",
+  "GOSHAKTSJWEQBDZ",
+  "UDDEWBUOOZOKDEE",
+  "KBERKALLYPAPSPE",
+  "QVMOCMLQPSCWEBX",
+  "QWOFZIYEQUHLOUB",
+  "VSMEPJVXUCSITWS",
+  "GWRBDYKGIXHDGTP",
+  "HLYCEOQDTMYOEOX",
+  "FCPBVIOZOKNMXDM",
+  "IAWBONKHGETAPAD",
+  "SVCZMDIQJKGRKQP",
+  "ESSETJQAQKALAZR"
+];
+const accepted = [["pillow", "pillows"], ["moved"], ["before"], ["demo", "demonstration"]];
 
-const cells=[];
+const grid = document.getElementById("grid");
+const status = document.getElementById("status");
+const result = document.getElementById("result");
 
-rows.forEach(row=>[...row].forEach(ch=>{
-  const cell=document.createElement("div");
-  cell.className="cell";
-  cell.textContent=ch;
-  grid.appendChild(cell);
-  cells.push(cell);
-}));
-function clean(v){return v.trim().toLowerCase().replace(/[^a-z]/g,"")}
-let selecting=false,start=-1;
-let selected=new Set();
-let currentLine=[];
+let selecting = false;
+let startIndex = null;
+let currentSelection = [];
+const foundCells = new Set();
+const foundWords = new Set();
 
-function paint(indices){
-  cells.forEach((c,i)=>c.style.background=selected.has(i)?"#d5d3ce":"#fff");
-  indices.forEach(i=>cells[i].style.background="#d5d3ce");
+function clean(value){
+  return value.trim().toLowerCase().replace(/[^a-z]/g,"");
 }
 
-function getLine(end){
-  if(start<0)return[];
-  const sr=Math.floor(start/15),sc=start%15;
-  const er=Math.floor(end/15),ec=end%15;
-  const dr=er-sr,dc=ec-sc;
-  if(!((dr===0)||(dc===0)||(Math.abs(dr)===Math.abs(dc))))return[];
-  const steps=Math.max(Math.abs(dr),Math.abs(dc));
-  const rs=dr===0?0:Math.sign(dr);
-  const cs=dc===0?0:Math.sign(dc);
-  const line=[];
-  for(let k=0;k<=steps;k++)line.push((sr+rs*k)*15+(sc+cs*k));
+function getCellIndexFromPoint(x,y){
+  const element = document.elementFromPoint(x,y);
+  const cell = element ? element.closest(".cell") : null;
+  if(!cell || !grid.contains(cell)) return null;
+  return Number(cell.dataset.index);
+}
+
+function getLine(start,end){
+  const r1 = Math.floor(start/15);
+  const c1 = start%15;
+  const r2 = Math.floor(end/15);
+  const c2 = end%15;
+
+  const dr = r2-r1;
+  const dc = c2-c1;
+
+  if(dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)) return [];
+
+  const steps = Math.max(Math.abs(dr),Math.abs(dc));
+  const sr = Math.sign(dr);
+  const sc = Math.sign(dc);
+  const line = [];
+
+  for(let i=0;i<=steps;i++){
+    line.push((r1+sr*i)*15 + (c1+sc*i));
+  }
+
   return line;
 }
 
-cells.forEach((cell,i)=>{
-  cell.addEventListener("pointerdown",e=>{
-    e.preventDefault();
-    selecting=true;
-    start=i;
-    paint([i]);
+function clearTemporary(){
+  currentSelection.forEach(i=>{
+    const cell = grid.children[i];
+    if(cell && !foundCells.has(i)) cell.classList.remove("selected");
   });
+  currentSelection = [];
+}
 
-  cell.addEventListener("pointermove",e=>{
-    e.preventDefault();
-    if(selecting){
-      currentLine=getLine(i);
-      if(currentLine.length)paint(currentLine);
-    }
+function paint(line){
+  clearTemporary();
+  currentSelection = line;
+
+  line.forEach(i=>{
+    const cell = grid.children[i];
+    if(cell && !foundCells.has(i)) cell.classList.add("selected");
   });
+}
+
+function finishSelection(){
+  if(!selecting) return;
+
+  selecting = false;
+
+  if(!currentSelection.length){
+    startIndex = null;
+    return;
+  }
+
+  const word = currentSelection.map(i=>grid.children[i].textContent).join("").toLowerCase();
+  const reverse = [...word].reverse().join("");
+
+  let matched = null;
+
+  for(const options of accepted){
+    for(const answer of options){
+      const normalized = clean(answer);
+      if(normalized === word || normalized === reverse){
+        matched = normalized;
+        break;
+      }
+    }
+    if(matched) break;
+  }
+
+  if(matched && !foundWords.has(matched)){
+    currentSelection.forEach(i=>{
+      foundCells.add(i);
+      const cell = grid.children[i];
+      if(cell){
+        cell.classList.remove("selected");
+        cell.classList.add("found");
+      }
+    });
+
+    foundWords.add(matched);
+    currentSelection = [];
+    status.textContent = "Word found: " + matched.toUpperCase() + " — " + foundWords.size + " of 4 found.";
+  } else if(matched){
+    clearTemporary();
+    status.textContent = matched.toUpperCase() + " has already been found.";
+  } else{
+    clearTemporary();
+    status.textContent = "That selection is not one of today's hidden words.";
+  }
+
+  startIndex = null;
+}
+
+rows.forEach((row,r)=>{
+  [...row].forEach((letter,c)=>{
+    const cell = document.createElement("div");
+    cell.className = "cell";
+    cell.textContent = letter;
+    cell.dataset.index = r*15+c;
+    grid.appendChild(cell);
+  });
+});
+
+grid.addEventListener("pointerdown",e=>{
+  const cell = e.target.closest(".cell");
+  if(!cell) return;
+
+  e.preventDefault();
+  selecting = true;
+  startIndex = Number(cell.dataset.index);
+  paint([startIndex]);
+  status.textContent = "Keep dragging to select the word.";
+});
+
+document.addEventListener("pointermove",e=>{
+  if(!selecting || startIndex === null) return;
+
+  e.preventDefault();
+
+  const index = getCellIndexFromPoint(e.clientX,e.clientY);
+  if(index === null) return;
+
+  const line = getLine(startIndex,index);
+  if(line.length) paint(line);
 });
 
 document.addEventListener("pointerup",e=>{
-  if(!selecting)return;
+  if(!selecting) return;
+  e.preventDefault();
+  finishSelection();
+});
 
-  if(currentLine.length){
-    const word=currentLine.map(i=>cells[i].textContent).join("");
-    const reverse=[...word].reverse().join("");
+document.addEventListener("pointercancel",()=>{
+  if(selecting){
+    selecting = false;
+    clearTemporary();
+    startIndex = null;
+    status.textContent = "";
+  }
+});
 
-    const valid=accepted.some(options=>
-      options.some(answer=>
-        answer.toUpperCase()===word ||
-        answer.toUpperCase()===reverse
-      )
-    );
+document.getElementById("submit").addEventListener("click",()=>{
+  const answers = [1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
 
-    if(valid){
-      currentLine.forEach(i=>selected.add(i));
-    }
+  const answersCorrect = answers.every((answer,index)=>
+    accepted[index].some(option=>clean(option)===answer)
+  );
+
+  const wordsCorrect = foundWords.size === 4;
+
+  if(answersCorrect && wordsCorrect){
+    result.className = "success";
+    result.innerHTML = `
+      <h2>ACCESS GRANTED</h2>
+      <div class="evidence">
+        <h3>Bonus Evidence Unlocked</h3>
+        <p class="message">PILLOW MOVED BEFORE DEMO</p>
+        <p>Investigators reviewed the showroom motion sensors.</p>
+        <p>The pillow was moved before the Adjustable Base was activated.</p>
+        <p>The pillow was not part of a random mess.</p>
+        <p>It was positioned before the demonstration began.</p>
+        <p>Someone planned the sleep setup before the demonstration.</p>
+      </div>
+    `;
+  }else{
+    result.className = "error";
+    let message = "<h3>ACCESS DENIED</h3>";
+
+    if(!answersCorrect)
+      message += "<p>One or more answers is incorrect.</p>";
+
+    if(!wordsCorrect)
+      message += "<p>You still need to find all four hidden words. Words found: " + foundWords.size + " of 4.</p>";
+
+    result.innerHTML = message;
   }
 
-  selecting=false;
-  currentLine=[];
-  paint([]);
+  result.style.display = "block";
+  result.scrollIntoView({behavior:"smooth",block:"nearest"});
 });
-document.getElementById("submit").addEventListener("click",()=>{
-const answers=[1,2,3,4].map(i=>clean(document.getElementById("a"+i).value));
-const accepted=[["pillow","pillows"],["moved"],["before"],["demo","demonstration"]];const result=document.getElementById("result");
-if(answers.every((v,i)=>accepted[i].includes(v))){
-result.className="success";result.innerHTML=`<h2>ACCESS GRANTED</h2><div class="evidence"><h3>Bonus Evidence Unlocked</h3><p class="message">PILLOW MOVED BEFORE DEMO</p><p>Investigators reviewed the showroom motion sensors.</p>
-<p>The pillow was moved before the Adjustable Base was activated.</p>
-<p>The pillow was not part of a random mess.</p>
-<p>It was positioned before the demonstration began.</p>
-<p>Someone planned the sleep setup before the demonstration.</p></div>`;
-}else{result.className="error";result.innerHTML="<h3>ACCESS DENIED</h3><p>One or more answers is incorrect.</p><p>Go back to the clues, check your answers, and try again.</p>";}
-result.style.display="block";result.scrollIntoView({behavior:"smooth",block:"nearest"});
-});
-</script></body></html>
+</script>
+</body>
+</html>
